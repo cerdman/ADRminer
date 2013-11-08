@@ -1,0 +1,77 @@
+\documentclass[a4paper]{article}
+
+\usepackage{graphicx}
+\usepackage[colorlinks=true,urlcolor=blue]{hyperref}
+\usepackage{array}
+\usepackage{color}
+
+\usepackage[utf8]{inputenc} % for UTF-8/single quotes from sQuote()
+
+\newcommand{\ita}[1]{\textit{#1}}
+
+\title{An introduction to \textit{ADRminer}} 
+\author{Ismaïl Ahmed}
+\date{\today}
+
+\usepackage{Sweave}
+\begin{document}
+\input{adrminer-intro-concordance}
+
+\maketitle
+
+\begin{abstract}
+This vignette provides an introductory tutorial to the \i{ADRminer} package for the R software. This package implements tools to handle and analyse spontaneous reports. This vignette introduces basic functionalities of the package. It is aimed to show how to load the data into R and use the different automated detection methods implemented in the package.
+\end{abstract}
+
+\section{Introduction}
+
+\section{Getting Started}
+\subsection{Installing ADRminer}
+
+Make sure you have a recent version of R ($\geq 2.13.0$) by typing:
+\begin{Schunk}
+\begin{Sinput}
+> R.version.string
+\end{Sinput}
+\end{Schunk}
+
+ADRminer relies on several packages. In particular, it depends on LBE which is hold on the Bioconductor website. You can install LBE by typing 
+
+\begin{Schunk}
+\begin{Sinput}
+> source("http://bioconductor.org/biocLite.R")
+> biocLite("LBE")
+\end{Sinput}
+\end{Schunk}
+
+Then, install adrminer with dependencies using:
+\begin{Schunk}
+\begin{Sinput}
+> install.packages("adrminer", dep=TRUE)
+\end{Sinput}
+\end{Schunk}
+
+\subsection{Data Format}
+
+For now, ADRminer can handle three types of data input format. The simplest one, when one do not want to introduce individual characteristics, is a three column data file which must contain 
+\begin{enumerate}
+  \item The drug labels
+  \item The AE labels
+  \item The corresponding numbers of Adverse Drug Reactions (ADRs)
+\end{enumerate}
+This data format is the one which was used for the former version of this package (PhViD).
+
+When one dispose of individual charasteristics such as sex or age of the patients or date recording of the spontaneous reports, ADRminer accepts two different data format.
+The first one must be made of one file with three mandatory columns
+\begin{enumerate}
+  \item The spontaneous report (or observation) identifier
+  \item The drug labels
+  \item The AE labels
+\end{enumerate}
+The subsequent columns represent individual characteristics such as age, gender. It is important to note that with this format, when an SR involve several drug and several AE, it is split into several lines where each line represents one drug AE event combination. Note also that this format leads to duplicate individual characteristics for each drug AE combinations.
+Here is an example of such data file
+
+\begin{Schunk}
+\begin{Sinput}
+> data(sr1)
+> head(sr1)

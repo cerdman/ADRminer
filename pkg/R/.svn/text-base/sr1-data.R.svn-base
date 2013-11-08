@@ -1,0 +1,9 @@
+#' @encoding UTF-8
+#' @title spontaneous reporting dataset n°1: sr1
+#' @description Spontaneous reporting dataset in a \code{data.frame} format. This dataset has to be transformed 
+#' into an PvInd object by means of \code{pvInd} 
+#' @name sr1-data
+#' @docType data
+#' @keywords data
+
+NA

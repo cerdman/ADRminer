@@ -1,0 +1,15 @@
+\docType{class}
+\encoding{UTF-8}
+\name{PvCont-class}
+\alias{names,PvCont-method}
+\alias{PvCont}
+\alias{PvCont-class}
+\alias{show,PvCont-method}
+\title{PvCont class}
+\description{
+  PvCont class
+}
+\author{
+  Youness Ergaibi & Ismaïl Ahmed
+}
+

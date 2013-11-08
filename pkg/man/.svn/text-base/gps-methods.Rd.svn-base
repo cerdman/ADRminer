@@ -1,0 +1,84 @@
+\docType{methods}
+\encoding{UTF-8}
+\name{gps}
+\alias{gps}
+\alias{gps,PvCont-method}
+\alias{gps,PvInd-method}
+\title{Gamma Poisson Shrinkage}
+\arguments{
+  \item{object}{An object of class pvInd or pvCont}
+
+  \item{rr0}{The tested risk. By default, rr0=1.}
+
+  \item{assocMeasure}{Statistic used to order the
+  drug-events pairs: \itemize{ \item postH0: Posterior
+  probability of the null hypothesis \item lb05: 5\%
+  quantile of the posterior distribution of lambda \item
+  postE: Posterior expectation of log(lambda,2) }}
+
+  \item{detectCriter}{Decision rule for the signal
+  generation based on: FDR: (Default value) nSig: number of
+  signals assocMeasure: ranking statistic. See
+  \code{assocMeasure}}
+
+  \item{criterThres}{Threshold used for
+  \code{detectCriter}. Ex 0.05 for FDR.}
+
+  \item{nMin}{Minimum number of spontaneous reports for a
+  drug-event pair to be potentially considered as a signal.
+  By default, \code{nMin}=1.}
+
+  \item{truncThres}{Used for the hyper parameter
+  calculations. The marginal likelihood involves mixtures
+  of two (possibly truncated) negative binomial. Default
+  value is set to 0 as the information regarding drug-event
+  pairs not associated with any adr is not used. By setting
+  \code{truncThres} to NULL, the whole contingency table is
+  rebuild and all data (thus including the 0s) are used to
+  estimate the hyperparameters. in order to account for
+  that drug-event pairs associated with no spontaneous
+  reports are usually not represented in the data. In order
+  not to use any truncation, set \code{truncThres} to NULL}
+
+  \item{hyperparamInit}{Initialization vector for the prior
+  mixture parameters (alpha1, beta1, alpha2, beta2, w). By
+  default, hyperparamInit = c(alpha1 = 0.2, beta1 = 0.06,
+  alpha2 = 1.4, beta2 = 1.8, w = 0.1), i.e. the prior
+  parameters provided in DuMouchel (1999).}
+
+  \item{hyperparam}{Hyper parameter values for the 2 gamma
+  mixture model. By default, hyperparam = NULL which means
+  that the hyperparameters are calculated by maximising the
+  marginal likelihood. This parameter is meant to avoid
+  this maximization step}
+
+  \item{strat}{Character vector containing the name of the
+  covariates to be used for a stratified analysis.}
+
+  \item{allRes}{Logical value indicating whether all
+  drug-event combination results must be provided.}
+}
+\value{
+  allSig Data.frame summarizing the results for all
+  drug-event combinations with at least \code{nMin}
+  spontaneous reports ordered by \code{assocMeasure}. This
+  output is provided if \code{allRes=TRUE}. Operating
+  characteristics are estimated according to Ahmed et al
+  (Stat Med 2009).
+
+  sig Same as \code{allSig} but restricted to the list of
+  generated signals.
+
+  nSig Number of generated signals.
+
+  call specified argumetnts
+}
+\description{
+  Gamma Poisson Shrinkage model proposed by DuMouchel
+  (1999) extended to the multiple comparison framework.
+}
+\author{
+  Youness Ergaibi & Ismaïl Ahmed
+}
+\keyword{gps}
+

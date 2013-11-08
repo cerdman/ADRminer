@@ -1,0 +1,30 @@
+\docType{methods}
+\encoding{UTF-8}
+\name{pvCont}
+\alias{pvCont}
+\alias{pvCont,data.frame,missing-method}
+\alias{pvCont,PvInd,character-method}
+\alias{pvCont,PvInd,missing-method}
+\title{pvCont}
+\arguments{
+  \item{object}{a PvInd object or a data.frame. The latter
+  should have 3 columns, i.e. the drug labels, the ae
+  labels and the corresponding number of spontaneous
+  reports.}
+
+  \item{strat}{Character vector containing the name of the
+  covariates to be used for a stratified analysis.
+  \code{strat} is only meaningful when used along with a
+  PvInd object.}
+}
+\value{
+  an object of class \code{\link{PvCont}}.
+}
+\description{
+  pvCont converts an pvInd object into PvCont object.
+}
+\author{
+  Ismaïl Ahmed
+}
+\keyword{pvCont}
+

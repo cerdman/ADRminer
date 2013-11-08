@@ -1,0 +1,10 @@
+
+# PvInd -------------------------------------------------
+setMethod("names", signature(x = "PvInd"), function(x) return(slotNames(x)))# end names method for PvInd
+
+# PvIndTime -------------------------------------------------
+setMethod("names", signature(x = "PvIndTime"), function(x) return(slotNames(x)))# end names method for PvInd
+
+# PvCont -------------------------------------------------
+setMethod("names", signature(x = "PvCont"), function(x) return(slotNames(x)))# end names method for PvInd
+

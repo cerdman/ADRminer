@@ -1,0 +1,28 @@
+Package: ADRminer
+Type: Package
+Title: ADRminer: Adverse Drug event Reporting systems miner
+Version: 0.65
+Date: 2013-09-06
+Author: Youness Ergaibi & Ismail Ahmed
+Maintainer: Ismail Ahmed <ismail.ahmed@inserm.fr>
+Description: ADRminer is an R package dedicated to the automated generation of
+    drug safety signals from spontaneous reporting databases.
+License: GPL-2
+LazyLoad : yes
+Depends:
+    methods,
+    LBE,
+    Matrix,
+Collate:
+    'classVirtual.R'
+    'classPvCont.R'
+    'classPvInd.R'
+    'pvInd.R'
+    'pvCont.R'
+    'ADRminer-package.R'
+    'names.R'
+    'show.R'
+    'gps.R'
+    'sr1-data.R'
+    'pvPen.R'
+    'pvIndResize.R'

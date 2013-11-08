@@ -1,0 +1,15 @@
+\docType{class}
+\encoding{UTF-8}
+\name{PvInd-class}
+\alias{names,PvInd-method}
+\alias{PvInd}
+\alias{PvInd-class}
+\alias{show,PvInd-method}
+\title{PvInd class}
+\description{
+  PvInd class
+}
+\author{
+  Youness Ergaibi & Ismaïl Ahmed
+}
+
