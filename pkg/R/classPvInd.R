@@ -18,38 +18,46 @@ setClass(
     cat("\n The Number of observations in drug and ae matrix are not equal \n")
     return(FALSE)
   }
-  return(TRUE)
-}
-setValidity("pvInd", .validPvInd)
-
-
-# pvIndTime ---------------------------------------------------------------
-#' @encoding UTF-8
-#' @name pvIndTime-class
-#' @aliases pvIndTime
-#' @aliases names,pvIndTime-method
-#' @docType class
-#' @title pvIndTime class
-#' @author Ismaïl Ahmed
-#' @exportClass pvIndTime
-#'  
-setClass(
-  "pvIndTime",
-  contains="pvInd",
-  representation(time="ANY")
-)
-
-.validPvIndTime <- function(object){
-  if (nrow(object@drug) != nrow(object@ae)){
-    cat("\n The numbers of observations in the drug and ae matrices differ \n")
+  if (length(object@dMargin) != ncol(object@drug)){
+    cat("\n Length of @dMargin has to equal ncol(@drug) \n")
+    return(FALSE)
+  }
+  if (length(object@aeMargin) != ncol(object@ae)){
+    cat("\n Length of @aeMargin has to equal ncol(@ae) \n")
     return(FALSE)
   }
   return(TRUE)
 }
-setValidity("pvIndTime", .validPvIndTime)
+setValidity("pvInd", .validPvInd)
 
-
-
+# 
+# # pvIndTime ---------------------------------------------------------------
+# #' @encoding UTF-8
+# #' @name pvIndTime-class
+# #' @aliases pvIndTime
+# #' @aliases names,pvIndTime-method
+# #' @docType class
+# #' @title pvIndTime class
+# #' @author Ismaïl Ahmed
+# #' @exportClass pvIndTime
+# #'  
+# setClass(
+#   "pvIndTime",
+#   contains="pvInd",
+#   representation(time="ANY")
+# )
+# 
+# .validPvIndTime <- function(object){
+#   if (nrow(object@drug) != nrow(object@ae)){
+#     cat("\n The numbers of observations in the drug and ae matrices differ \n")
+#     return(FALSE)
+#   }
+#   return(TRUE)
+# }
+# setValidity("pvIndTime", .validPvIndTime)
+# 
+# 
+# 
 
 
 # getDrug method definition -----------------------------------------------

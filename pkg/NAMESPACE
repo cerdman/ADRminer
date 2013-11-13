@@ -1,6 +1,5 @@
 exportClasses(pvCont)
 exportClasses(pvInd)
-exportClasses(pvIndTime)
 export(gps)
 export(gps.pvCont)
 export(gps.pvInd)

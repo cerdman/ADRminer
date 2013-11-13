@@ -31,6 +31,8 @@ library(ADRminer)  ### load `ADRminer`
 ```
 ## Loading required package: LBE
 ## Loading required package: Matrix
+## Loading required package: glmnet
+## Loaded glmnet 1.9-5
 ```
 
 ```r
@@ -246,7 +248,7 @@ pvIndResize can be used to remove drugs for which the marginal number of reports
 
 
 ```r
-pvIndSr1Red <- pvIndResize(pvIndSr1, aeMarginMin = 50, dMarginMin = 50)
+pvIndSr1Red <- pvIndResize(pvIndSr1, aeMarginMin = 100, dMarginMin = 50)
 pvIndSr1Red
 ```
 
@@ -261,10 +263,10 @@ pvIndSr1Red
 ## i1000        0       0       0       0       0       0
 ## i10000       0       0       0       0       0       0
 ## i10001       0       0       0       0       0       0
-## @ae:  17282 x 84 , AE sparse matrix:
-##        10000085 10001497 10001507 10001551 10002071 10002199
+## @ae:  17282 x 43 , AE sparse matrix:
+##        10000085 10001507 10001551 10002071 10002199 10002473
 ## i1            0        0        0        0        0        0
-## i10           0        0        0        0        0        0
+## i10           0        0        0        0        0        1
 ## i100          0        0        0        0        0        0
 ## i1000         0        0        0        0        0        0
 ## i10000        0        0        0        0        0        0
@@ -291,30 +293,46 @@ toto <- pvPen(pvIndSr1, cov = c("sexFactor", "ageFactor"))
 ```
 
 ```
-## [1] 17282     8
-## 6 x 8 sparse Matrix of class "dgCMatrix"
-##   sexFactor_2 sexFactor_NA ageFactor_(3,10] ageFactor_(10,18]
-## 1           1            .                .                 .
-## 2           1            .                .                 .
-## 3           1            .                .                 .
-## 4           .            .                .                 .
-## 5           .            .                .                 .
-## 6           .            .                .                 .
-##   ageFactor_(18,40] ageFactor_(40,65] ageFactor_(65,110] ageFactor_NA
-## 1                 .                 1                  .            .
-## 2                 1                 .                  .            .
-## 3                 .                 .                  1            .
-## 4                 .                 .                  1            .
-## 5                 .                 .                  1            .
-## 6                 .                 .                  1            .
-## [1] 17282
+## 1 , 10000060
+```
+
+```
+## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+```
+
+```
+## [1] 147.4
+## 'log Lik.' -64.68 (df=9)
+## [1] 129.4
+```
+
+```
+## Warning: from glmnet Fortran code (error code -2); Convergence for 2th
+## lambda value not reached after maxit=100000 iterations; solutions for
+## larger lambdas returned
+```
+
+```
+## 
+## Call:  glmnet(x = cBind(covMat, x), y = y, family = "binomial", nlambda = 200,      standardize = F, dfmax = nDrugMax, penalty.factor = penalty,      lower.limits = lowerLim) 
+## 
+##      Df   %Dev  Lambda
+## [1,]  8 0.0677 9.9e+35
+## [1] 138.8
+## [1] 129.4
 ## NULL
+```
+
+```
+## Error: erreur d'évaluation de l'argument 'x' lors de la sélection d'une méthode pour la fonction 'print' : Erreur dans apply(betaCoef, 2, sum) : dim(X) doit avoir un longueur positive
 ```
 
 ```r
 plot(toto)
 ```
 
-![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10.png) 
+```
+## Error: objet 'toto' introuvable
+```
 
 
