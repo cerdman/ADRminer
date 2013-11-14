@@ -11,8 +11,6 @@
 #' @docType methods
 #' @aliases pvCont,pvInd,character-method
 #' @aliases pvCont,pvInd,missing-method
-#' @aliases names,pvCont
-#' @aliases shows,pvCont
 #' @aliases pvCont,data.frame,missing-method
 #' @aliases pvCont,matrix,missing-method
 setGeneric(
@@ -128,4 +126,5 @@ setMethod(
     pvCont(object)
   }
 )
-    
+
+

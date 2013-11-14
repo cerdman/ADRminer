@@ -18,8 +18,7 @@
 #' @docType methods
 #' @aliases pvInd,data.frame,missing-method
 #' @aliases pvInd,data.frame,data.frame-method
-#' @aliases names,pvInd
-#' @aliases shows,pvInd
+
 
 # pvInd method definition ---------------------------------------------------- 
 
@@ -69,8 +68,8 @@ setMethod(
       rownames(cov) <- as.character(adr[sel,1])
     }
     cov <-NULL
-    PvInd<-new(Class="pvInd", drug=sD, ae=sAe, dMargin=dMargin, aeMargin=aeMargin, cov=cov)
-    return(PvInd)
+    pvInd<-new(Class="pvInd", drug=sD, ae=sAe, dMargin=dMargin, aeMargin=aeMargin, cov=cov)
+    return(pvInd)
   }
 )
 
@@ -110,15 +109,15 @@ setMethod(
     
     if (!is.null(cov)){
       idx <- match(row.names(sAe), as.character(cov[,1]))
-      if(sum(is.na(idx))) warning("Some labels are missing or mismatch between adr and covariates datasets")
+      if(sum(is.na(idx))) warning("Some observations are missing or mismatch between adr and covariates datasets")
       covSort <- cov[idx,]
       row.names(covSort) <- covSort[,1]
       covSort <- covSort[,-1]      
     }else{
       covSort <- NULL
     }
-    PvInd<-new(Class="pvInd", drug=sD, ae=sAe, dMargin=dMargin, aeMargin=aeMargin, cov=covSort)
-    return(PvInd)
+    pvInd<-new(Class="pvInd", drug=sD, ae=sAe, dMargin=dMargin, aeMargin=aeMargin, cov=covSort)
+    return(pvInd)
   }
 )
 

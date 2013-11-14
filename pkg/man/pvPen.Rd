@@ -4,24 +4,26 @@
 \alias{pvPen.pvInd}
 \title{Penalized regression detection strategy}
 \usage{
-  \method{pvPen}{pvInd}(object, aeLab="all", cov=NULL,
+  \method{pvPen}{pvInd}(object, aeId="all", covId=NULL,
     detectCriter=c("BIC", "AIC"), posConst=TRUE,
-    nDrugMax=20, parallel=FALSE, nCore=NULL, \dots)
+    nDrugMax=20, parallel=require(parallel), nCores=NULL,
+    \dots)
 }
 \arguments{
   \item{object}{an object of class PvInd}
 
-  \item{cov}{a character vector indicating which covariate
-  have to be used in the analyses. As current
+  \item{covId}{a character vector indicating which
+  covariate have to be used in the analyses. As current
   implementation of the lasso (glmnet) does not Such
   variables are first use in a logistic regression model
   and the residual is then used as the outcome in the
   penalized regression}
 
-  \item{aeLab}{The label of the adverse event to be
+  \item{aeId}{The label of the adverse event to be
   regressed. By default, the \code{pvPen} will regress all
   ae, one at a time and this can be very time consuming and
-  RAM demanding.}
+  RAM demanding. This parameter can be either the name of
+  the ae(s), or the index of the ae column}
 
   \item{detectCriter}{Can be either BIC or AIC. These
   criteria are used to select the final model.}
@@ -35,11 +37,12 @@
   the model. In addition to be computationnaly intensive,
   odels with to many drugs are likely to be very unstable.}
 
-  \item{parallel}{Whether parallel should be used in order
-  to speed up the calculation. Be careful as it will be
-  more RAM demanding. Only available for linux or Mac Os}
+  \item{parallel}{Whether parallel computations should be
+  used to speed up the calculation. Be careful as it will
+  be more RAM demanding. Only available for linux or Mac
+  Os}
 
-  \item{nCore}{If parallel is true, allows to specify the
+  \item{nCores}{If parallel is true, allows to specify the
   number of cores to be used for parallel computing.}
 
   \item{...}{Further arguments to be passed to other

@@ -5,6 +5,13 @@
 #' @title pvInd class
 #' @author Youness Ergaibi & Ismaïl Ahmed
 #' @exportClass pvInd
+#' @aliases names,pvInd-method
+#' @aliases shows,pvInd-method
+#' @section Methods:
+#' \describe{
+#'  \item{names}{\code{signature(x = "pvInd")}: returns the names of the slots of the object.}
+#' }
+
 
 # pvInd Class definition --------------------------------------------------
 setClass(
@@ -29,6 +36,40 @@ setClass(
   return(TRUE)
 }
 setValidity("pvInd", .validPvInd)
+
+
+# names -------------------------------------------------------------------
+setMethod("names", signature(x = "pvInd"), function(x) return(slotNames(x)))# end names method for pvInd
+
+
+# show --------------------------------------------------------------------
+setMethod(
+  "show",
+  "pvInd",
+  function (object){
+    cat("S4 class:", as.character(class(object)), "\n")    
+    cat("\n@drug: ", nrow(object@drug), "x", ncol(object@drug), ", Drug sparse matrix:\n" )
+    print(as.matrix(head(object@drug[,1:6])))        
+    cat("@ae: ", nrow(object@ae), "x", ncol(object@ae), ", AE sparse matrix:\n" )
+    print(as.matrix(head(object@ae[,1:6])))  
+    #cat("@dMargin: (length=", length(object@dMargin), ")", head(object@dMargin), "\n" , sep="")   
+    #cat("@aeMargin: (length=", length(object@aeMargin), ")", head(object@aeMargin), "\n" , sep="")          
+    if(!is.null(object@cov)) {
+      cat("@cov: Covariate data.frame:\n")  
+      print(head(object@cov))
+    }
+  }
+)# end show method for pvInd
+
+
+
+
+
+
+
+
+
+
 
 # 
 # # pvIndTime ---------------------------------------------------------------

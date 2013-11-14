@@ -1,13 +1,11 @@
 \docType{methods}
 \encoding{UTF-8}
 \name{pvCont}
-\alias{names,pvCont}
 \alias{pvCont}
 \alias{pvCont,data.frame,missing-method}
 \alias{pvCont,matrix,missing-method}
 \alias{pvCont,pvInd,character-method}
 \alias{pvCont,pvInd,missing-method}
-\alias{shows,pvCont}
 \title{pvCont}
 \arguments{
   \item{object}{a pvInd object or a data.frame. The latter

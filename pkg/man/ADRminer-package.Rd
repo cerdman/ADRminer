@@ -4,15 +4,13 @@
 \alias{ADRminer-package}
 \title{ADRminer: Adverse Drug event Reporting systems miner}
 \description{
-  \code{ADRminer} dedicated to the automated generation of
-  drug safety signals from spontaneous reporting databases.
-  It is developed on R-Forge by Youness Eragaibi and Ismaïl
-  Ahmed and will be officially released on CRAN
-  periodically. Currently under development, this package
-  will likely replace the PhViD package. Great efforts are
-  being made to re-think the structure of the objects
-  manipulated. In particular, ADRminer will handle
-  individual spontaneous reports and thus make it possible
+  \code{ADRminer} is dedicated to the automated generation
+  of drug safety signals from spontaneous reporting
+  databases. While currently under development, this
+  package will likely replace the PhViD package. Great
+  efforts were made to re-think the structure of the
+  objects manipulated. In particular, ADRminer handles
+  individual spontaneous reports and thus makes it possible
   to conduct stratified analyses according to several
   covariates. From a more technical point of view, objects
   manipulated (\code{\link{pvInd}} and
@@ -29,8 +27,8 @@
   \code{biocLite("LBE")} in the R console.
 }
 \author{
-  Ismaïl Ahmed (developer and maintainer), Antoine Poncet
-  (developer) and Youness Ergaibi (developer)
+  Ismaïl Ahmed, Antoine Poncet and Youness Ergaibi
+  (developer)
 }
 \references{
   Ahmed I, Thiessard F, Miremont-Salamé G, Bégaud B,

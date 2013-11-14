@@ -1,11 +1,9 @@
 \docType{methods}
 \encoding{UTF-8}
 \name{pvInd}
-\alias{names,pvInd}
 \alias{pvInd}
 \alias{pvInd,data.frame,data.frame-method}
 \alias{pvInd,data.frame,missing-method}
-\alias{shows,pvInd}
 \title{pvInd}
 \arguments{
   \item{adr}{a data.frame with three columns:}

@@ -14,6 +14,37 @@ setClass(
   prototype(dLab=factor(), aeLab=factor(), n=matrix(), dMargin=matrix(0), aeMargin=matrix(0), expN=matrix(0), N=0, strat=NULL, matrix(0))
 )
 
+# names -------------------------------------------------------------------
+
+setMethod("names", signature(x = "pvCont"), function(x) return(slotNames(x)))# end names method pvCont
+
+
+# show ------------------------------------------------
+setMethod(
+  "show",
+  "pvCont",
+  function (object){
+    cat("S4 class: ", as.character(class(object)),"\n")
+    cat(nlevels(object@dLab), " drugs \n" )
+    cat(nlevels(object@aeLab), " adverse events \n" )
+    if (!is.null(object@strat)) cat("Strates: ", paste (object@strat, " ; "), "\n" )
+    #     cat("adr pair counts: ")
+    #     cat("@n:\n")
+    #     print(head(data.frame(drugLab=object@drugLab, aeLab=object@aeLab, round(object@n,2))))
+    #     cat("\n")
+    #     cat("expected number: ")
+    #     cat("@expN:\n")
+    #     print(head(data.frame(drugLab=object@drugLab, aeLab=object@aeLab, round(object@expN,2))))
+    #     cat("\n")
+    #     cat("@dMargin:\n")
+    #     print(head(data.frame(drugLab=object@drugLab, aeLab=object@aeLab, object@dMargin)))
+    #     cat("\n")
+    #     cat("@aeMargin:\n")
+    #     print(head(data.frame(drugLab=object@drugLab, aeLab=object@aeLab, object@aeMargin)))
+    #     cat("@N:\n")
+    #     print(str(object@N))    
+  }
+)# end show method for pvCont
 
 
 # # summary method definition ----------------------------------------------------
