@@ -3,11 +3,20 @@
 \alias{pvIndResize}
 \title{pvIndResize}
 \usage{
-  pvIndResize(pvIndObj, aeMarginMin = 1, drugMarginMin = 1)
+  pvIndResize(pvIndObj, drugId = NULL, aeId = NULL,
+    aeMarginMin = 1, drugMarginMin = 1)
 }
 \arguments{
   \item{pvIndObj}{an object of class "pvInd" (see
   \code{\link{pvInd-class}} and \code{\link{pvInd}})}
+
+  \item{drugId}{can be a vector of characters containing
+  drug labels to be selected or a vector of column indices
+  or the drug matrice (object$drug)}
+
+  \item{aeId}{can be a vector of characters containing ae
+  labels to be selected or a vector of column indices or
+  the ae matrice (object$ae)}
 
   \item{aeMarginMin}{Minimum number of reports in which an
   ae must be involved in order to be kept}
@@ -19,8 +28,9 @@
   an object of class pvInd
 }
 \description{
-  \code{pvIndResize} makes it possible to remove drug(s)
-  and/or ae(s) whose margin are less than a given number.
+  \code{pvIndResize} makes it possible to select sets of
+  drugs and/or aes. It also allows to remove drug(s) and/or
+  ae(s) whose margin are less than a given number.
 }
 \author{
   Ismaïl Ahmed

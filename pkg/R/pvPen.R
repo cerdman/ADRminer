@@ -95,9 +95,9 @@ pvPen.pvInd <- function(object, aeId="all", covId=NULL, detectCriter=c("BIC", "A
       resGlmnet[[i]] <- glmnet(x, y, family="binomial", standardize=F, dfmax=nDrugMax, lower.limits=lower.limits)
     }
     jerrGlmnet[i] <- resGlmnet[[i]]$jerr
-    
+    print(resGlmnet[[i]]$jerr)
     if (jerrGlmnet[i] == 0) { ## check convergence of glmnet
-      print(resGlmnet[[i]]$jerr)
+      
       idxDf <- !duplicated(resGlmnet[[i]]$df)
       betaCoef <- resGlmnet[[i]]$beta[,idxDf]!=0
       betaCoef <- betaCoef[,apply(betaCoef,2,sum)>=1] #remove s0
@@ -142,20 +142,15 @@ pvPen.pvInd <- function(object, aeId="all", covId=NULL, detectCriter=c("BIC", "A
           nParam[[i]][j] <- ncol(xGlm[[j]])+1
         }
       }
-    }else{
-      #plot(apply(betaCoef, 2, sum), bic)
-      #dev[[i]] <- NA
-      #bic[[i]] <- NA
-      #nParam[[i]] <- NA
+      idxMin <- which.min(bic[[i]])
+      resGlm[[i]] <- res[[idxMin]]
     }
-    idxMin <- which.min(bic[[i]])
-    resGlm[[i]] <- res[[idxMin]]
   }
   
   resFinal <- vector("list")
   resFinal$bic <- bic
   resFinal$dev <- dev
-  resLogGlmnet <- jerrGlmnet
+  resFinal$jerrGlmnet <- jerrGlmnet
   resFinal$nParam <- nParam
   resFinal$glmnet <- resGlmnet  
   resFinal$resGlm <- resGlm

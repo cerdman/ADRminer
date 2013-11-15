@@ -26,6 +26,7 @@
 #'  \item{getAeMargin}{\code{signature(x = "pvInd")}: returns the adverse event margin counts.}
 #'  \item{getCov}{\code{signature(x = "pvInd")}: returns the covariate data.frame.}
 #' }
+#' @slot 
 #### to be changed if applied to several classes
 #' @aliases getDrug getAe getDrugMargin getAeMargin getCov
 
