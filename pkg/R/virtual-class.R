@@ -1,5 +1,5 @@
 # Virtual classes ---------------------------------------------------------
-#' @name virtualClass
+#' @name virtual-class
 #' @docType class
 #' @aliases factOrN-class numOrN-class dfOrN-class charOrN-class
 #' @title Virtual classes for ADRminer

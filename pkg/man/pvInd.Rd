@@ -13,8 +13,8 @@
   is assumed that the first column of the data.frame
   corresponds to the spontaneous report identifier.}
 
-  \item{dMarginLim}{Minimum number of spontaneous reports
-  for a drug to be included (default is 1)}
+  \item{drugMarginLim}{Minimum number of spontaneous
+  reports for a drug to be included (default is 1)}
 
   \item{aeMarginLim}{Minimum number of spontaneous reports
   for an adverse event to be included (default is 1)}

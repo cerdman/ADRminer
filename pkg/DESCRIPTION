@@ -17,14 +17,12 @@ Depends:
 Suggests:
     parallel,
 Collate:
-    'classVirtual.R'
-    'classPvCont.R'
-    'classPvInd.R'
+    'ADRminer-package.R'
+    'virtual-class.R'
+    'pvCont-class.R'
+    'pvInd-class.R'
     'pvInd.R'
     'pvCont.R'
-    'ADRminer-package.R'
-    'names.R'
-    'show.R'
     'gps.R'
     'pvPen.R'
     'pvIndResize.R'

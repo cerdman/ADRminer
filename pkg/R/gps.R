@@ -51,7 +51,7 @@ gps.pvCont <- function(object, rr0=1, assocMeasure=c("postH0","lb05","postE"), d
   assocMeasure <- match.arg(assocMeasure) # keep only the first argument
   detectCriter <- match.arg(detectCriter)
   n <- object@n
-  dMargin <- object@dMargin
+  drugMargin <- object@drugMargin
   aeMargin <- object@aeMargin
   expN <- object@expN
   dLab <- object@dLab
@@ -60,7 +60,7 @@ gps.pvCont <- function(object, rr0=1, assocMeasure=c("postH0","lb05","postE"), d
   # only keep the pairs associated with at least nMin sr
   if(nMin > 1) {
     expN <- expN[n >= nMin]
-    dMargin <- dMargin[n >= nMin]
+    drugMargin <- drugMargin[n >= nMin]
     aeMargin <- aeMargin[n >= nMin]
     n <-  n[n >= nMin]
   }
@@ -148,7 +148,7 @@ gps.pvCont <- function(object, rr0=1, assocMeasure=c("postH0","lb05","postE"), d
     expN[order(assocM, decreasing=decrease)],
     assocM[order(assocM, decreasing=decrease)],
     (n/expN)[order(assocM, decreasing=decrease)],
-    dMargin[order(assocM, decreasing=decrease)],
+    drugMargin[order(assocM, decreasing=decrease)],
     aeMargin[order(assocM, decreasing=decrease)],
     FDR,
     postH0[order(assocM, decreasing=decrease)] )

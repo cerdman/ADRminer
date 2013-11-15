@@ -33,11 +33,11 @@ setMethod(
     
     n1. <- as.numeric(cont %*% matrix(1, nrow=ncol(cont)))
     n.1 <- as.numeric(matrix(1, ncol=nrow(cont)) %*% cont)      
-    dMargin <- matrix(n1.[coord[,1]], ncol=1)
+    drugMargin <- matrix(n1.[coord[,1]], ncol=1)
     aeMargin <- matrix(n.1[coord[,2]], ncol=1)
     N <- sum(n11) 
-    expN <- dMargin*aeMargin/N
-    pvCont<-new(Class="pvCont", dLab=dLab, aeLab=aeLab, n=n11, dMargin=dMargin, aeMargin=aeMargin, expN=expN, N=N, strat=NULL, coord=coord)
+    expN <- drugMargin*aeMargin/N
+    pvCont<-new(Class="pvCont", dLab=dLab, aeLab=aeLab, n=n11, drugMargin=drugMargin, aeMargin=aeMargin, expN=expN, N=N, strat=NULL, coord=coord)
     return(pvCont)
   }  
 )
@@ -71,7 +71,7 @@ setMethod(
     }
     n11 <- matrix(0, nrow=nrow(coord),  ncol=L)
     expN <- matrix(0, nrow=nrow(coord),  ncol=L)
-    dMargin <- matrix(0, nrow=nrow(coord),  ncol=L)
+    drugMargin <- matrix(0, nrow=nrow(coord),  ncol=L)
     aeMargin <- matrix(0, nrow=nrow(coord),  ncol=L)
     N <- vector("numeric", length=L)
     for(l in 1:L)
@@ -80,13 +80,13 @@ setMethod(
       n11[,l] <- cont[coord] 
       n1._mat <- apply(cont,1,sum) 
       n.1_mat <- apply(cont,2,sum)
-      dMargin[,l] <- n1._mat[coord[,1]] 
+      drugMargin[,l] <- n1._mat[coord[,1]] 
       aeMargin[,l] <- n.1_mat[coord[,2]] # ... et sa marge "colonne"
       N[l] <- sum(n11[,l]) 
-      expN[,l] <- dMargin[,l]*aeMargin[,l]/N[l]
+      expN[,l] <- drugMargin[,l]*aeMargin[,l]/N[l]
     }
     names(N) <- levels(varStrat)
-    new("pvCont", dLab=dLab, aeLab=aeLab, n=n11, dMargin=dMargin,  aeMargin= aeMargin, expN=expN, N=N, strat=levels(varStrat))                
+    new("pvCont", dLab=dLab, aeLab=aeLab, n=n11, drugMargin=drugMargin,  aeMargin= aeMargin, expN=expN, N=N, strat=levels(varStrat))                
   }
 )
 
@@ -110,10 +110,10 @@ setMethod(
     coord <-coord[order(coord[,1]),]
     n <- matrix(cont[coord], ncol=1) 
     N <- sum(n) # le nombre total de notifications
-    dMargin <- matrix(n1.[coord[,1]], ncol=1)  # on affecte à chaque notification sa marge "ligne"...
+    drugMargin <- matrix(n1.[coord[,1]], ncol=1)  # on affecte à chaque notification sa marge "ligne"...
     aeMargin <- matrix(n.1[coord[,2]], ncol=1) # ... et sa marge "colonne"
-    expN<-dMargin*aeMargin/N
-    pvCont<-new(Class="pvCont",dLab=dLab, aeLab=aeLab, n=n, dMargin= dMargin, aeMargin=aeMargin, expN=expN, N=N, strat=NULL)
+    expN<-drugMargin*aeMargin/N
+    pvCont<-new(Class="pvCont",dLab=dLab, aeLab=aeLab, n=n, drugMargin= drugMargin, aeMargin=aeMargin, expN=expN, N=N, strat=NULL)
     return(pvCont)
   }  
 )

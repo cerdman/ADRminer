@@ -3,7 +3,7 @@
 \alias{pvIndResize}
 \title{pvIndResize}
 \usage{
-  pvIndResize(pvIndObj, aeMarginMin = 1, dMarginMin = 1)
+  pvIndResize(pvIndObj, aeMarginMin = 1, drugMarginMin = 1)
 }
 \arguments{
   \item{pvIndObj}{an object of class "pvInd" (see
@@ -12,7 +12,7 @@
   \item{aeMarginMin}{Minimum number of reports in which an
   ae must be involved in order to be kept}
 
-  \item{dMarginMin}{Minimum number of reports in which a
+  \item{drugMarginMin}{Minimum number of reports in which a
   drug must be involved in order to be kept}
 }
 \value{

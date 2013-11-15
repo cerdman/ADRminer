@@ -8,7 +8,7 @@
 # \item adverse event label
 # }
 #' @param cov data.frame which contains individual covariates that can be used for stratified analysis. It is assumed that the first column of the data.frame corresponds to the spontaneous report identifier.
-#' @param dMarginLim Minimum number of spontaneous reports for a drug to be included (default is 1)
+#' @param drugMarginLim Minimum number of spontaneous reports for a drug to be included (default is 1)
 #' @param aeMarginLim Minimum number of spontaneous reports for an adverse event to be included (default is 1) 
 #' @description \code{pvInd} is used to convert raw data  (\code{adr} and ) \code{cov}) into an pvInd object that can be used in the signal detection method functions.
 #' @author Ismaïl Ahmed
@@ -31,7 +31,7 @@ setGeneric(
 setMethod(
   f="pvInd",
   signature = c(adr = "data.frame", cov = "missing"),
-  definition = function(adr, cov, dMarginLim=1, aeMarginLim=1){
+  definition = function(adr, cov, drugMarginLim=1, aeMarginLim=1){
     
     if(nrow(adr)==0) { stop("adr must contain at least one row")}
     if(ncol(adr)<3) { stop("adr must contain at least three columns")}
@@ -59,7 +59,7 @@ setMethod(
     colnames(sAe) <- colnD
     
     nSp <- nrow(sD)
-    dMargin <- drop(Matrix(1, nrow=1, ncol=nSp) %*% sD)
+    drugMargin <- drop(Matrix(1, nrow=1, ncol=nSp) %*% sD)
     aeMargin <- drop(Matrix(1, nrow=1, ncol=nSp) %*% sAe)
     
     if (ncol(adr)>3){
@@ -68,7 +68,7 @@ setMethod(
       rownames(cov) <- as.character(adr[sel,1])
     }
     cov <-NULL
-    pvInd<-new(Class="pvInd", drug=sD, ae=sAe, dMargin=dMargin, aeMargin=aeMargin, cov=cov)
+    pvInd<-new(Class="pvInd", drug=sD, ae=sAe, drugMargin=drugMargin, aeMargin=aeMargin, cov=cov)
     return(pvInd)
   }
 )
@@ -77,7 +77,7 @@ setMethod(
 setMethod(
   f="pvInd",
   signature = c(adr = "data.frame", cov="data.frame"),
-  definition = function(adr, cov, dMarginLim=1, aeMarginLim=1){
+  definition = function(adr, cov, drugMarginLim=1, aeMarginLim=1){
     if(nrow(adr)==0) { stop("adr must contain at least one row")}
     if(ncol(adr)!=3) { stop("adr must contain three columns")}
     
@@ -104,7 +104,7 @@ setMethod(
     colnames(sAe) <- colnD
     
     nSp <- nrow(sD)
-    dMargin <- drop(Matrix(1, nrow=1, ncol=nSp) %*% sD)
+    drugMargin <- drop(Matrix(1, nrow=1, ncol=nSp) %*% sD)
     aeMargin <- drop(Matrix(1, nrow=1, ncol=nSp) %*% sAe)
     
     if (!is.null(cov)){
@@ -116,7 +116,7 @@ setMethod(
     }else{
       covSort <- NULL
     }
-    pvInd<-new(Class="pvInd", drug=sD, ae=sAe, dMargin=dMargin, aeMargin=aeMargin, cov=covSort)
+    pvInd<-new(Class="pvInd", drug=sD, ae=sAe, drugMargin=drugMargin, aeMargin=aeMargin, cov=covSort)
     return(pvInd)
   }
 )

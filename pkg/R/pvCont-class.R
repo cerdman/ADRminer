@@ -10,8 +10,8 @@
 # pvCont Class definition --------------------------------------------------
 setClass(
   "pvCont",
-  representation(dLab="factor", aeLab="factor", n="matrix", dMargin="matrix", aeMargin="matrix", expN="matrix", N="numeric", strat="charOrN", coord="matrix"),
-  prototype(dLab=factor(), aeLab=factor(), n=matrix(), dMargin=matrix(0), aeMargin=matrix(0), expN=matrix(0), N=0, strat=NULL, matrix(0))
+  representation(dLab="factor", aeLab="factor", n="matrix", drugMargin="matrix", aeMargin="matrix", expN="matrix", N="numeric", strat="charOrN", coord="matrix"),
+  prototype(dLab=factor(), aeLab=factor(), n=matrix(), drugMargin=matrix(0), aeMargin=matrix(0), expN=matrix(0), N=0, strat=NULL, matrix(0))
 )
 
 # names -------------------------------------------------------------------
@@ -36,8 +36,8 @@ setMethod(
     #     cat("@expN:\n")
     #     print(head(data.frame(drugLab=object@drugLab, aeLab=object@aeLab, round(object@expN,2))))
     #     cat("\n")
-    #     cat("@dMargin:\n")
-    #     print(head(data.frame(drugLab=object@drugLab, aeLab=object@aeLab, object@dMargin)))
+    #     cat("@drugMargin:\n")
+    #     print(head(data.frame(drugLab=object@drugLab, aeLab=object@aeLab, object@drugMargin)))
     #     cat("\n")
     #     cat("@aeMargin:\n")
     #     print(head(data.frame(drugLab=object@drugLab, aeLab=object@aeLab, object@aeMargin)))
@@ -53,13 +53,13 @@ setMethod(
 #   nAe<-nlevels(object@aeLab)
 #   N<-sum(object@n)
 #   
-#   object@dMargin <- pvCont(object@drugLab,object@aeLab,object@n)@dMargin    # marges des lignes
+#   object@drugMargin <- pvCont(object@drugLab,object@aeLab,object@n)@drugMargin    # marges des lignes
 #   object@aeMargin <- pvCont(object@drugLab,object@aeLab,object@n)@aeMargin   # marges des colonnes
 #   object@expN<-pvCont(object@drugLab,object@aeLab,object@n)@expN
 #   cat("nD =", nD ,"\n" )  
 #   cat("nAe =", nAe , "\n" ) 
 #   cat("N =",N,"\n" )
-#   cat("dMargin=",object@dMargin,"\n" )   
+#   cat("drugMargin=",object@drugMargin,"\n" )   
 #   cat("\naeMargin=",object@aeMargin,"\n" ) 
 #   cat("\nexpN=", object@expN, "\n" ) 
 # })#end  summary method for pvCont
