@@ -42,7 +42,11 @@ pvPen.pvInd <- function(object, aeId="all", covId=NULL, detectCriter=c("BIC", "A
   
   detectCriter <- match.arg(detectCriter)
   lower.limit <- ifelse(posConst, 0, -Inf)
-  
+  pvPenCall = match.call(expand.dots = TRUE)
+  #which = match(c("type.measure", "nfolds", "foldid", "grouped", 
+#                  "keep"), names(glmnet.call), F)
+  #print(pvPenCall)
+  #print(names(pvPenCall))
   x <- object@drug
   if (aeId[1]=="all") { ## match.arg ?
     ae <- object@ae
@@ -90,9 +94,9 @@ pvPen.pvInd <- function(object, aeId="all", covId=NULL, detectCriter=c("BIC", "A
     y <- as.numeric(ae[,i])
     
     if(!is.null(covId)){
-      resGlmnet[[i]] <- glmnet(cBind(covGlmnet,x), y, family="binomial", standardize=F, penalty.factor=penalty.factor, dfmax=nDrugMax, lower.limits=lower.limits)
+      resGlmnet[[i]] <- glmnet(cBind(covGlmnet,x), y, family="binomial", standardize=F, penalty.factor=penalty.factor, dfmax=nDrugMax, lower.limits=lower.limits, ...)
     }else{
-      resGlmnet[[i]] <- glmnet(x, y, family="binomial", standardize=F, dfmax=nDrugMax, lower.limits=lower.limits)
+      resGlmnet[[i]] <- glmnet(x, y, family="binomial", standardize=F, dfmax=nDrugMax, lower.limits=lower.limits, ...)
     }
     jerrGlmnet[i] <- resGlmnet[[i]]$jerr
     print(resGlmnet[[i]]$jerr)
