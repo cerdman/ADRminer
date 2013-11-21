@@ -90,7 +90,7 @@ pvPen.pvInd <- function(object, aeId="all", covId=NULL, detectCriter=c("BIC", "A
   # Glmnet adjustment -------------------------------------------------------
   
   for(i in 1:nAe){
-    cat(i, ",", colnames(ae)[i], "\n")
+    cat("adverse event: ", colnames(ae)[i], "\n")
     y <- as.numeric(ae[,i])
     
     if(!is.null(covId)){
@@ -99,8 +99,8 @@ pvPen.pvInd <- function(object, aeId="all", covId=NULL, detectCriter=c("BIC", "A
       resGlmnet[[i]] <- glmnet(x, y, family="binomial", standardize=F, dfmax=nDrugMax, lower.limits=lower.limits, ...)
     }
     jerrGlmnet[i] <- resGlmnet[[i]]$jerr
-    print(resGlmnet[[i]]$jerr)
-    print(max(resGlmnet[[i]]$df))
+    #print(resGlmnet[[i]]$jerr)
+    #print(max(resGlmnet[[i]]$df))
     if ((jerrGlmnet[i] == 0) && (max(resGlmnet[[i]]$df>0)))  { ## check convergence of glmnet
       
       idxDf <- !duplicated(resGlmnet[[i]]$df)
@@ -123,11 +123,12 @@ pvPen.pvInd <- function(object, aeId="all", covId=NULL, detectCriter=c("BIC", "A
             #glm.lower.limits <- lower.limit
           }
           colnames(xGlm) <- row.names(betaCoef)[bSel]
+          xGlm <- as.data.frame(xGlm)
           #print(dim(xGlm))
           #res[[j]] <- glmnet(xGlm, y, family="binomial", standardize=F, lower.limits=glm.lower.limits, lambda=0)
           #res[[j]] <- glmnet(xGlm, y, family="binomial", standardize=F, lower.limits=glm.lower.limits, lambda=0)
           
-          res[[j]] <- glm(y~xGlm, family="binomial")
+          res[[j]] <- glm(y~., data=xGlm, family="binomial")
           #print(res[[j]]$coefficients)
           if (posConst & (sum(res$coefficients[-1]<0)>0)) warning("negative coef in the regression step")
           dev[[i]][j] <- res[[j]]$deviance
@@ -141,22 +142,25 @@ pvPen.pvInd <- function(object, aeId="all", covId=NULL, detectCriter=c("BIC", "A
           xGlm[[j]] <- x[,bSel, drop=F]
           colnames(xGlm[[j]]) <- row.names(betaCoef)[bSel]
         }
+
         if(!is.null(covId)){
           res <- mclapply(xGlm, .glmPar, y=y, cov=object@cov[, covId], mc.cores=nCores)
         }else{
           res <- mclapply(xGlm, .glmPar, y=y, cov=NULL, mc.cores=nCores)
         }
+
         for (j in 1:ncol(betaCoef)) { 
-          print(dim(xGlm[[j]]))
           dev[[i]][j] <- res[[j]]$deviance
           bic[[i]][j] <- dev[[i]][j] + (ncol(xGlm[[j]])+1)*log(nObs)
           nParam[[i]][j] <- ncol(xGlm[[j]])+1
         }
       }
       idxMin <- which.min(bic[[i]])
+      if (idxMin==length(bic[[i]])) warning("The best BIC is obtained with about nDrugMax variables")
       resGlm[[i]] <- res[[idxMin]]
     }
   }
+
   
   resFinal <- vector("list")
   resFinal$bic <- bic
@@ -164,14 +168,15 @@ pvPen.pvInd <- function(object, aeId="all", covId=NULL, detectCriter=c("BIC", "A
   resFinal$jerrGlmnet <- jerrGlmnet
   resFinal$nParam <- nParam
   resFinal$glmnet <- resGlmnet  
-  resFinal$resGlm <- resGlm
+  resFinal$bestGlm <- resGlm
   resFinal  
 }
 
 .glmPar <- function(x, y, cov=NULL, family="binomial"){
   x <- as.matrix(x)
   if (!is.null(cov)) x <- cbind(x, cov)
-  res <- glm(y~x, family =  family)
+  x <- as.data.frame(x)
+  res <- glm(y~., data=x, family =  family)
   res
   ## pas de warnings sur les poscontraints
 }

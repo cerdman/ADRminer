@@ -1,0 +1,4 @@
+critere EBIC
+fonction plot pour les resultats de pvPen
+creation d'un objet pour les résultats de pvPen
+l'objet pvPen devrait etre une liste par effet indésirable
