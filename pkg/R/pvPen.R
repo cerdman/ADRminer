@@ -100,7 +100,8 @@ pvPen.pvInd <- function(object, aeId="all", covId=NULL, detectCriter=c("BIC", "A
     }
     jerrGlmnet[i] <- resGlmnet[[i]]$jerr
     print(resGlmnet[[i]]$jerr)
-    if (jerrGlmnet[i] == 0) { ## check convergence of glmnet
+    print(max(resGlmnet[[i]]$df))
+    if ((jerrGlmnet[i] == 0) && (max(resGlmnet[[i]]$df>0)))  { ## check convergence of glmnet
       
       idxDf <- !duplicated(resGlmnet[[i]]$df)
       betaCoef <- resGlmnet[[i]]$beta[,idxDf]!=0
@@ -113,13 +114,15 @@ pvPen.pvInd <- function(object, aeId="all", covId=NULL, detectCriter=c("BIC", "A
       
       if (parallel==FALSE){
         for (j in 1:ncol(betaCoef)){
+          bSel <- betaCoef[,j]==1
           if(!is.null(covId)){
-            xGlm <- as.matrix(cBind(covGlmnet,x)[,betaCoef[,j]==1])
+            xGlm <- as.matrix(cBind(covGlmnet,x)[,bSel])
             #glm.lower.limits <- c(rep(-Inf,ncol(covGlmnet)), rep(lower.limit, (ncol(xGlm)-ncol(covGlmnet))))
           }else{
-            xGlm <- as.matrix(x[,betaCoef[,j]==1])
+            xGlm <- as.matrix(x[,bSel])
             #glm.lower.limits <- lower.limit
           }
+          colnames(xGlm) <- row.names(betaCoef)[bSel]
           #print(dim(xGlm))
           #res[[j]] <- glmnet(xGlm, y, family="binomial", standardize=F, lower.limits=glm.lower.limits, lambda=0)
           #res[[j]] <- glmnet(xGlm, y, family="binomial", standardize=F, lower.limits=glm.lower.limits, lambda=0)
@@ -133,7 +136,11 @@ pvPen.pvInd <- function(object, aeId="all", covId=NULL, detectCriter=c("BIC", "A
         }
       }else{
         xGlm <- vector("list", length=ncol(betaCoef))
-        for (j in 1:ncol(betaCoef)) xGlm[[j]] <- x[,betaCoef[,j]==1, drop=F]
+        for (j in 1:ncol(betaCoef)) {
+          bSel <- betaCoef[,j]==1
+          xGlm[[j]] <- x[,bSel, drop=F]
+          colnames(xGlm[[j]]) <- row.names(betaCoef)[bSel]
+        }
         if(!is.null(covId)){
           res <- mclapply(xGlm, .glmPar, y=y, cov=object@cov[, covId], mc.cores=nCores)
         }else{

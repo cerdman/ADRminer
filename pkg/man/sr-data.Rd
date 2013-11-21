@@ -2,9 +2,9 @@
 \encoding{UTF-8}
 \name{sr-data}
 \alias{covSr1}
+\alias{sr-data}
 \alias{sr1}
 \alias{sr2}
-\alias{sr-data}
 \title{spontaneous reporting dataset szqcription}
 \description{
   Spontaneous reporting dataset in a \code{data.frame}

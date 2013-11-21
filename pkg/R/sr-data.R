@@ -8,4 +8,5 @@
 #' @aliases sr1
 #' @aliases sr2
 #' @aliases covSr1
+#' 
 NA

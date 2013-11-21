@@ -1,20 +1,20 @@
 \docType{class}
 \encoding{UTF-8}
 \name{pvInd-class}
+\alias{$,pvInd-method}
+\alias{$<-,pvInd-method}
 \alias{getAe}
+\alias{getAe,pvInd-method}
 \alias{getAeMargin}
 \alias{getAeMargin,pvInd-method}
-\alias{getAe,pvInd-method}
 \alias{getCov}
 \alias{getCov,pvInd-method}
 \alias{getDrug}
+\alias{getDrug,pvInd-method}
 \alias{getDrugMargin}
 \alias{getDrugMargin,pvInd-method}
-\alias{getDrug,pvInd-method}
 \alias{names,pvInd-method}
 \alias{pvInd-class}
-\alias{$<-,pvInd-method}
-\alias{$,pvInd-method}
 \alias{shows,pvInd-method}
 \title{pvInd class}
 \description{
