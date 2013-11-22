@@ -1,7 +1,7 @@
 Package: ADRminer
 Type: Package
 Title: ADRminer: Adverse Drug event Reporting systems miner
-Version: 0.67
+Version: 0.68
 Date: 2013-11-08
 Authors@R: c(person("Ismail Ahmed", role = c("aut", "cre"),
     email="ismail.ahmed@inserm.fr"), person("Youness Ergaibi", role="ctb"))
@@ -28,3 +28,4 @@ Collate:
     'pvIndResize.R'
     'pvLogistic.R'
     'sr-data.R'
+    'nADR.R'

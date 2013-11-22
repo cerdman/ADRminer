@@ -10,8 +10,8 @@
 # pvCont Class definition --------------------------------------------------
 setClass(
   "pvCont",
-  representation(dLab="factor", aeLab="factor", n="matrix", drugMargin="matrix", aeMargin="matrix", expN="matrix", N="numeric", strat="charOrN", coord="matrix"),
-  prototype(dLab=factor(), aeLab=factor(), n=matrix(), drugMargin=matrix(0), aeMargin=matrix(0), expN=matrix(0), N=0, strat=NULL, matrix(0))
+  representation(drugLab="factor", aeLab="factor", n="matrix", drugMargin="matrix", aeMargin="matrix", expN="matrix", N="numeric", strat="charOrN", coord="matrix"),
+  prototype(drugLab=factor(), aeLab=factor(), n=matrix(), drugMargin=matrix(0), aeMargin=matrix(0), expN=matrix(0), N=0, strat=NULL, matrix(0))
 )
 
 # names -------------------------------------------------------------------
@@ -25,7 +25,7 @@ setMethod(
   "pvCont",
   function (object){
     cat("S4 class: ", as.character(class(object)),"\n")
-    cat(nlevels(object@dLab), " drugs \n" )
+    cat(nlevels(object@drugLab), " drugs \n" )
     cat(nlevels(object@aeLab), " adverse events \n" )
     if (!is.null(object@strat)) cat("Strates: ", paste (object@strat, " ; "), "\n" )
     #     cat("adr pair counts: ")

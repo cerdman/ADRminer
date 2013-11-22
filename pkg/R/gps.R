@@ -54,7 +54,7 @@ gps.pvCont <- function(object, rr0=1, assocMeasure=c("postH0","lb05","postE"), d
   drugMargin <- object@drugMargin
   aeMargin <- object@aeMargin
   expN <- object@expN
-  dLab <- object@dLab
+  dLab <- object@drugLab
   aeLab <- object@aeLab
   N <- object@N
   # only keep the pairs associated with at least nMin sr
