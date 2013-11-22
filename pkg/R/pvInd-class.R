@@ -1,5 +1,7 @@
 # pvInd ---------------------------------------------------------------
 #' @encoding UTF-8
+#' @title Formal class "pvInd"
+#' @description The class pvInd is a class (S4) for storing individual spontaneous report data. 
 #' @name pvInd-class
 #' @docType class
 #' @title pvInd class
@@ -14,6 +16,11 @@
 #' @aliases getCov,pvInd-method
 #' @aliases $,pvInd-method
 #' @aliases $<-,pvInd-method
+#' @slot drug Drug matrix in sparse format \link{\code{Matrix}}.
+#' @slot ae Adverse Event matrix in sparse format \link{\code{Matrix}}.
+#' @slot drugMargin Vector of the marginal counts for each drug.
+#' @slot aeMargin Vector of the marginal counts for each ae.
+#' @slot cov \code{data.frame} containing individual covariates.
 #' @section Methods:
 #' \describe{
 #'  \item{names}{\code{signature(x = "pvInd")}: returns the names of the slots of the object.}
@@ -26,7 +33,6 @@
 #'  \item{getAeMargin}{\code{signature(x = "pvInd")}: returns the adverse event margin counts.}
 #'  \item{getCov}{\code{signature(x = "pvInd")}: returns the covariate data.frame.}
 #' }
-#' @slot 
 #### to be changed if applied to several classes
 #' @aliases getDrug getAe getDrugMargin getAeMargin getCov
 

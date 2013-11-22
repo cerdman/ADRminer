@@ -1,6 +1,7 @@
 #' @encoding UTF-8
 #' @title pvInd
 #' @name pvInd
+#' @description This function (which takes the same name that its corresponding formal class \code{\link{pvInd-class}}) should be used to convert a data.frame containing individual spontaneous reports (and optionnaly supplementary individual information) into an pvInd object.
 #' @param adr a data.frame with three columns:
 # \itemize{
 # \item spontaneous report identifier
@@ -18,6 +19,7 @@
 #' @docType methods
 #' @aliases pvInd,data.frame,missing-method
 #' @aliases pvInd,data.frame,data.frame-method
+#' @seealso \code{\link{pvInd-class}}
 
 
 # pvInd method definition ---------------------------------------------------- 

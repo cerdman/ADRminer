@@ -4,10 +4,10 @@
 \alias{pvPen.pvInd}
 \title{Penalized regression detection strategy}
 \usage{
-  \method{pvPen}{pvInd}(object, aeId="all", covId=NULL,
-    detectCriter=c("BIC", "AIC"), posConst=TRUE,
-    nDrugMax=20, parallel=require(parallel), nCores=NULL,
-    \dots)
+  \method{pvPen}{pvInd}(object, aeId = "all", covId = NULL,
+    criter = c("BIC", "AIC", "eBIC"), posConst = TRUE,
+    nDrugMax = 20, parallel = require(parallel), nCores =
+    NULL, \dots)
 }
 \arguments{
   \item{object}{an object of class PvInd}
@@ -25,8 +25,8 @@
   RAM demanding. This parameter can be either the name of
   the ae(s), or the index of the ae column}
 
-  \item{detectCriter}{Can be either BIC or AIC. These
-  criteria are used to select the final model.}
+  \item{criter}{Can be either BIC or AIC. These criteria
+  are used to select the final model.}
 
   \item{posConst}{If TRUE (default), the regression
   coefficients are constrained to be non non negative, this

@@ -15,7 +15,7 @@
 #' Such variables are first use in a logistic regression model and the residual is then used as the outcome 
 #' in the penalized regression
 #' @param aeId The label of the adverse event to be regressed. By default, the \code{pvPen} will regress all ae, one at a time and this can be very time consuming and RAM demanding. This parameter can be either the name of the ae(s), or the index of the ae column
-#' @param detectCriter Can be either BIC or AIC. These criteria are used to select the final model.
+#' @param criter Can be either BIC or AIC. These criteria are used to select the final model.
 #' @param posConst If TRUE (default), the regression coefficients are constrained to be non non negative, this to ensure that the final model only contains drugs "increasing" the risk of a given ae.
 #' @param nDrugMax Maximum number of drugs to be included in the model. In addition to be computationnaly intensive, odels with to many drugs are likely to be very unstable.
 #' @param parallel Whether parallel computations should be used to speed up the calculation. Be careful as it will be more RAM demanding. Only available for linux or Mac Os
@@ -23,10 +23,8 @@
 #' @param ... Further arguments to be passed to other functions (None for the moment)
 #' @export
 #' @usage
-#' \method{pvPen}{pvInd}(object, aeId="all", covId=NULL, detectCriter=c("BIC", "AIC"), posConst=TRUE, nDrugMax=20, parallel=require(parallel), nCores=NULL, \dots)
-#' 
-# multiple regression.
-# biclustering
+#' \method{pvPen}{pvInd}(object, aeId = "all", covId = NULL, criter = c("BIC", "AIC", "eBIC"), posConst = TRUE, nDrugMax = 20, parallel = require(parallel), nCores = NULL, \dots)
+
 
 
 # pvPen definition --------------------------------------------------------
@@ -34,26 +32,24 @@ pvPen <- function (object, ...) UseMethod("pvPen")
 
 #' @export
 # pvPen pvInd -------------------------------------------------------------
-pvPen.pvInd <- function(object, aeId="all", covId=NULL, detectCriter=c("BIC", "AIC"), posConst=TRUE, nDrugMax=20, parallel=require(parallel), nCores=NULL, ...){
+pvPen.pvInd <- function(object, aeId = "all", covId = NULL, criter = c("BIC", "AIC", "eBIC"), posConst = TRUE, nDrugMax = 20, parallel = require(parallel), nCores = NULL, ...){
   
   if(parallel && !require(parallel)) stop("parallel package requested but not installed")
   if(parallel && is.null(nCores)) nCores <- parallel::detectCores()
   if (!inherits(object, "pvInd")) stop("object must be of class PvInd")
   
-  detectCriter <- match.arg(detectCriter)
+  criter <- match.arg(criter)
   lower.limit <- ifelse(posConst, 0, -Inf)
   pvPenCall = match.call(expand.dots = TRUE)
-  #which = match(c("type.measure", "nfolds", "foldid", "grouped", 
-#                  "keep"), names(glmnet.call), F)
-  #print(pvPenCall)
-  #print(names(pvPenCall))
+  
   x <- object@drug
-  if (aeId[1]=="all") { ## match.arg ?
+  if (aeId[1] == "all") { ## match.arg ?
     ae <- object@ae
   }else{
-    ae <- object@ae[,aeId, drop=F]
+    ae <- object@ae[,aeId, drop = F]
   }
   nAe <- ncol(ae)
+  nD <- ncol(x)
   nObs <- nrow(ae)
   
   # Transform vector of covariates into a dummy matrix for glmnet -----------
@@ -65,15 +61,15 @@ pvPen.pvInd <- function(object, aeId="all", covId=NULL, detectCriter=c("BIC", "A
     for (i in 1:length(cov)){  
       if (is.factor(object@cov[[covId[i]]])) {
         temp <- model.matrix(~object@covId[[cov[i]]]-1)
-        colnames(temp) <- paste(covId[i], "_", levels(object@cov[[covId[i]]]), sep="")
+        colnames(temp) <- paste(covId[i], "_", levels(object@cov[[covId[i]]]), sep = "")
         covGlmnet <- cbind(covGlmnet, temp[,-1])
       } else  {
-        covGlmnet <- cbind(covGlmnet, object@cov[,covId[i], drop=F])
+        covGlmnet <- cbind(covGlmnet, object@cov[,covId[i], drop = F])
       }
     }    
   }
   
-  resGlmnet <- vector("list", length=nAe)  
+  resGlmnet <- vector("list", length = nAe)  
   if(!is.null(covId)){
     penalty.factor <- c(rep(0, ncol(covGlmnet)), rep(1, ncol(x)))
     lower.limits <- c(rep(-Inf, ncol(covGlmnet)), rep(lower.limit, ncol(x)))
@@ -81,11 +77,13 @@ pvPen.pvInd <- function(object, aeId="all", covId=NULL, detectCriter=c("BIC", "A
     lower.limits <- lower.limit
   }
   
-  dev <- vector("list", length=nAe)
-  bic <- vector("list", length=nAe)
-  nParam <- vector("list", length=nAe)
-  resGlm <- vector("list", length=nAe)
-  jerrGlmnet <- vector("numeric", length=nAe)
+  dev <- vector("list", length = nAe)
+  bic <- vector("list", length = nAe)
+  aic <- vector("list", length = nAe)
+  ebic <- vector("list", length = nAe)
+  nParam <- vector("list", length = nAe)
+  resGlm <- vector("list", length = nAe)
+  jerrGlmnet <- vector("numeric", length = nAe)
   
   # Glmnet adjustment -------------------------------------------------------
   
@@ -94,144 +92,97 @@ pvPen.pvInd <- function(object, aeId="all", covId=NULL, detectCriter=c("BIC", "A
     y <- as.numeric(ae[,i])
     
     if(!is.null(covId)){
-      resGlmnet[[i]] <- glmnet(cBind(covGlmnet,x), y, family="binomial", standardize=F, penalty.factor=penalty.factor, dfmax=nDrugMax, lower.limits=lower.limits, ...)
+      resGlmnet[[i]] <- glmnet(cBind(covGlmnet,x), y, family="binomial", standardize = F, penalty.factor = penalty.factor, dfmax = nDrugMax, lower.limits = lower.limits, ...)
     }else{
-      resGlmnet[[i]] <- glmnet(x, y, family="binomial", standardize=F, dfmax=nDrugMax, lower.limits=lower.limits, ...)
+      resGlmnet[[i]] <- glmnet(x, y, family = "binomial", standardize = F, dfmax = nDrugMax, lower.limits = lower.limits, ...)
     }
     jerrGlmnet[i] <- resGlmnet[[i]]$jerr
-    #print(resGlmnet[[i]]$jerr)
-    #print(max(resGlmnet[[i]]$df))
+    
     if ((jerrGlmnet[i] == 0) && (max(resGlmnet[[i]]$df>0)))  { ## check convergence of glmnet
       
       idxDf <- !duplicated(resGlmnet[[i]]$df)
-      betaCoef <- resGlmnet[[i]]$beta[,idxDf]!=0
-      betaCoef <- betaCoef[,apply(betaCoef,2,sum)>=1] #remove s0
+      betaCoef <- resGlmnet[[i]]$beta[,idxDf] != 0
+      betaCoef <- betaCoef[,apply(betaCoef,2,sum) >= 1] #remove s0
       
-      res <- vector("list", length=ncol(betaCoef))
-      dev[[i]] <- vector("numeric", length=ncol(betaCoef))
-      bic[[i]] <- vector("numeric", length=ncol(betaCoef))
-      nParam[[i]] <- vector("numeric", length=ncol(betaCoef))
+      nGlm <- ncol(betaCoef)
+      res <- vector("list", length = nGlm)
+      dev[[i]] <- vector("numeric", length = nGlm)
+      bic[[i]] <- vector("numeric", length = nGlm)
+      aic[[i]] <- vector("numeric", length = nGlm)
+      ebic[[i]] <- vector("numeric", length = nGlm)
+      nParam[[i]] <- vector("numeric", length = nGlm)
       
-      if (parallel==FALSE){
-        for (j in 1:ncol(betaCoef)){
-          bSel <- betaCoef[,j]==1
+      if (parallel == FALSE){
+        for (j in 1:nGlm){
+          betaSel <- betaCoef[,j] == 1
           if(!is.null(covId)){
-            xGlm <- as.matrix(cBind(covGlmnet,x)[,bSel])
-            #glm.lower.limits <- c(rep(-Inf,ncol(covGlmnet)), rep(lower.limit, (ncol(xGlm)-ncol(covGlmnet))))
+            xGlm <- as.matrix(cBind(covGlmnet,x)[,betaSel])
           }else{
-            xGlm <- as.matrix(x[,bSel])
-            #glm.lower.limits <- lower.limit
+            xGlm <- as.matrix(x[,betaSel])
           }
-          colnames(xGlm) <- row.names(betaCoef)[bSel]
-          xGlm <- as.data.frame(xGlm)
-          #print(dim(xGlm))
-          #res[[j]] <- glmnet(xGlm, y, family="binomial", standardize=F, lower.limits=glm.lower.limits, lambda=0)
-          #res[[j]] <- glmnet(xGlm, y, family="binomial", standardize=F, lower.limits=glm.lower.limits, lambda=0)
-          
-          res[[j]] <- glm(y~., data=xGlm, family="binomial")
-          #print(res[[j]]$coefficients)
-          if (posConst & (sum(res$coefficients[-1]<0)>0)) warning("negative coef in the regression step")
-          dev[[i]][j] <- res[[j]]$deviance
-          bic[[i]][j] <- dev[[i]][j] + (ncol(xGlm)+1)*log(nObs)
-          nParam[[i]][j] <- ncol(xGlm)+1
-        }
+          colnames(xGlm) <- row.names(betaCoef)[betaSel]
+          xGlm <- as.data.frame(xGlm)          
+          res[[j]] <- glm(y~., data = xGlm, family = "binomial")
+        } 
       }else{
-        xGlm <- vector("list", length=ncol(betaCoef))
-        for (j in 1:ncol(betaCoef)) {
-          bSel <- betaCoef[,j]==1
-          xGlm[[j]] <- x[,bSel, drop=F]
-          colnames(xGlm[[j]]) <- row.names(betaCoef)[bSel]
+        xGlm <- vector("list", length = nGlm)
+        for (j in 1:nGlm) {
+          betaSel <- betaCoef[,j] == 1
+          xGlm[[j]] <- x[,betaSel, drop = F]
+          colnames(xGlm[[j]]) <- row.names(betaCoef)[betaSel]
         }
-
+        
         if(!is.null(covId)){
-          res <- mclapply(xGlm, .glmPar, y=y, cov=object@cov[, covId], mc.cores=nCores)
+          res <- mclapply(xGlm, .glmPar, y = y, cov = object@cov[, covId], mc.cores = nCores)
         }else{
-          res <- mclapply(xGlm, .glmPar, y=y, cov=NULL, mc.cores=nCores)
+          res <- mclapply(xGlm, .glmPar, y = y, cov = NULL, mc.cores = nCores)
         }
-
-        for (j in 1:ncol(betaCoef)) { 
-          dev[[i]][j] <- res[[j]]$deviance
-          bic[[i]][j] <- dev[[i]][j] + (ncol(xGlm[[j]])+1)*log(nObs)
-          nParam[[i]][j] <- ncol(xGlm[[j]])+1
-        }
+      } ## end if PARALLEL
+      for (j in 1:nGlm) { ## Best Glm model
+        dev[[i]][j] <- res[[j]]$deviance
+        #bic[[i]][j] <- dev[[i]][j] + (ncol(xGlm[[j]])+1)*log(nObs)
+        bic[[i]][j] <- BIC(res[[j]])
+        aic[[i]][j] <- AIC(res[[j]])      
+        nParam[[i]][j] <- ncol(xGlm[[j]])+1
+        ebic[[i]][j] <- bic[[i]][j] + 2 * lchoose(nD,nParam[[i]][j])
       }
-      idxMin <- which.min(bic[[i]])
-      if (idxMin==length(bic[[i]])) warning("The best BIC is obtained with about nDrugMax variables")
+      idxMin <- switch(criter, 
+                       BIC =  which.min(bic[[i]]),
+                       AIC =  which.min(aic[[i]]),
+                       eBIC = which.min(ebic[[i]])
+      )
+      
+      if (idxMin == nGlm) warning(paste("The best", criter, "is obtained with about nDrugMax variables."))
       resGlm[[i]] <- res[[idxMin]]
-    }
-  }
-
+    } ## en if on check glmnet convergence
+  } ## end loop on AE
   
-  resFinal <- vector("list")
-  resFinal$bic <- bic
-  resFinal$dev <- dev
-  resFinal$jerrGlmnet <- jerrGlmnet
-  resFinal$nParam <- nParam
-  resFinal$glmnet <- resGlmnet  
-  resFinal$bestGlm <- resGlm
+  resFinal <- vector("list", length = nAe)
+  
+  for (i in 1: nAe){
+    resFinal[[i]] <- vector("list")
+    resFinal[[i]]$BIC <- bic[[i]]
+    resFinal[[i]]$AIC <- aic[[i]]
+    resFinal[[i]]$eBIC <- ebic[[i]]
+    resFinal[[i]]$jerrGlmnet <- jerrGlmnet[i]
+    resFinal[[i]]$nParam <- nParam[[i]]
+    resFinal[[i]]$glmnet <- resGlmnet[[i]]  
+    resFinal[[i]]$bestGlm <- resGlm[[i]]
+  }
+  if (nAe == 1) {
+    resFinal <- unlist(resFinal, recursive = F)
+  }else{
+    names(resFinal) <- colnames(ae)
+  }
+  
   resFinal  
 }
 
-.glmPar <- function(x, y, cov=NULL, family="binomial"){
+.glmPar <- function(x, y, cov = NULL, family = "binomial"){
   x <- as.matrix(x)
   if (!is.null(cov)) x <- cbind(x, cov)
   x <- as.data.frame(x)
-  res <- glm(y~., data=x, family =  family)
+  res <- glm(y~., data = x, family =  family)
   res
   ## pas de warnings sur les poscontraints
 }
-# 
-# 
-# .LogisConst<-function(x,y,wt=rep(1,length(y)),intercept=TRUE,lower=rep(0,dim(as.data.frame(x))[2])) {
-#   ## this function was largely adapted from Venables, W. N. and Ripley, B. D. (2002) Modern Applied Statistics with S. New York: Springer.
-#   cat("function fmin ok")
-#   fmin<-function(betas,X,y,w){
-#     p<-plogis(X%*%betas)
-#     -sum(2*w*ifelse(y,log(p),log(1-p)))
-#   }
-#   gmin<-function(betas,X,y,w){
-#     eta<-X%*%betas
-#     p<-plogis(eta)
-#     gam<--2*(w*dlogis(eta)*ifelse(y,1/p,-1/(1-p)))
-#     t(gam) %*%X
-#   }
-#   
-#   init<-rep(0,dim(as.data.frame(x))[2])
-#   if(is.null(dim(x))) dim(x)<-c(length(x),1)
-#   dn<-colnames(x)
-#   print(dn)
-#   if(!length(dn)) dn<-paste("Var", 1:dim(as.data.frame(x))[2],sep="")
-#   p<-dim(as.data.frame(x))[2] + intercept
-#   if(intercept) {x<-cbind(1,x);cat(p);dn<-c("(Intercept)",dn);bas<-c(-Inf,lower)}
-#   if(is.factor(y)) y<-unclass(y)!=1
-#   #fit<-nlminb(rep(0,dim(as.data.frame(x))[2]),fmin,gmin,lower=bas,X=x,y=y,w=wt)
-#   fit<-optim(par=rep(0,ncol(as.data.frame(x))),fn=fmin,gr=gmin,lower=bas,method="L-BFGS-B",X=x,y=y,w=wt)
-#   names(fit$par)<-dn
-#   cat("\nCoefficients:\n");print(fit$par)
-#   #cat("\nResidual Deviance:",format(fit$objective),"\n")
-#   cat("\nConvergence message:", fit$convergence,"\n")
-#   invisible(fit)
-# }
-# 
-# .paraStabSel <- function(idSel, x, y, alpha, family, lambda) {
-#   resGlmnet <- glmnet(x[idSel,], y[idSel], alpha = alpha, family = family, lambda = lambda, lower.limits=0)
-#   resGlmnet$beta>0
-# }
-# 
-# .paraStabSel2 <- function(idSel, x, y, alpha, family, lambda) {
-#   resGlmnet <- glmnet(x[idSel,], y[idSel], alpha = alpha, family = family, lambda = lambda, lower.limits=0)
-#   resGlmnet$beta>0
-# }
-# 
-# # if (detectCriter=="stabSel"){
-# #   idSel <- as.data.frame(matrix(sample(1:nObs, nBoot*sizeBoot, replace=T), ncol=nBoot, nrow=sizeBoot))
-# #   print(head(idSel[,1:10]))
-# #   if (parallel){
-# #     resBeta <- mclapply(idSel, .paraStabSel2, x, y, 1, family ="gaussian")
-# #   }else{
-# #     resBeta <- lapply(idSel, .paraStabSel2, x, y, 1, family ="gaussian")
-# #   }
-# #   minCol <- min(unlist(lapply(resBeta, ncol)))
-# #   print(maxCol) 
-# #   betaSel <- Reduce('+', resBeta)
-# # }

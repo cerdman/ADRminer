@@ -1,6 +1,8 @@
-critere EBIC
 fonction plot pour les resultats de pvPen
 creation d'un objet pour les résultats de pvPen
-l'objet pvPen devrait etre une liste par effet indésirable
 plot des données pvInd en s'inspirant des données de dapc
 documenter les classes
+
+#' 
+# multiple regression.
+# biclustering

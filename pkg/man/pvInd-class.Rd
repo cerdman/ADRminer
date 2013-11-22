@@ -16,9 +16,10 @@
 \alias{names,pvInd-method}
 \alias{pvInd-class}
 \alias{shows,pvInd-method}
-\title{pvInd class}
+\title{Formal class "pvInd"}
 \description{
-  pvInd class
+  The class pvInd is a class (S4) for storing individual
+  spontaneous report data.
 }
 \section{Methods}{
   \describe{ \item{names}{\code{signature(x = "pvInd")}:

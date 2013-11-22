@@ -23,12 +23,18 @@
   a pvInd object
 }
 \description{
-  \code{pvInd} is used to convert raw data (\code{adr} and
-  ) \code{cov}) into an pvInd object that can be used in
-  the signal detection method functions.
+  This function (which takes the same name that its
+  corresponding formal class \code{\link{pvInd-class}})
+  should be used to convert a data.frame containing
+  individual spontaneous reports (and optionnaly
+  supplementary individual information) into an pvInd
+  object.
 }
 \author{
   Ismaïl Ahmed
+}
+\seealso{
+  \code{\link{pvInd-class}}
 }
 \keyword{pvInd}
 

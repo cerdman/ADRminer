@@ -46,32 +46,3 @@ setMethod(
   }
 )# end show method for pvCont
 
-
-# # summary method definition ----------------------------------------------------
-# setMethod ("summary", signature(object="pvCont"), function(object, ...){
-#   nD<-nlevels(object@drugLab)
-#   nAe<-nlevels(object@aeLab)
-#   N<-sum(object@n)
-#   
-#   object@drugMargin <- pvCont(object@drugLab,object@aeLab,object@n)@drugMargin    # marges des lignes
-#   object@aeMargin <- pvCont(object@drugLab,object@aeLab,object@n)@aeMargin   # marges des colonnes
-#   object@expN<-pvCont(object@drugLab,object@aeLab,object@n)@expN
-#   cat("nD =", nD ,"\n" )  
-#   cat("nAe =", nAe , "\n" ) 
-#   cat("N =",N,"\n" )
-#   cat("drugMargin=",object@drugMargin,"\n" )   
-#   cat("\naeMargin=",object@aeMargin,"\n" ) 
-#   cat("\nexpN=", object@expN, "\n" ) 
-# })#end  summary method for pvCont
-
-# getdrugLab method definition ----------------------------------------------------
-#setGeneric ( "getdrugLab", function(object){standardGeneric("getdrugLab")})
-#setMethod("getdrugLab","pvCont",function(object )
-#{return (object@drugLab) } )#end getdrugLab method for pvCont
-
-# getaeLab method definition ----------------------------------------------------
-#setGeneric ( "getaeLab", function(object){standardGeneric("getaeLab")})
-
-#setMethod("getaeLab","pvCont",function(object )
-#{return (object@aeLab) } )#end getaeLab method for pvCont
-#####################################################################################
