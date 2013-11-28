@@ -29,3 +29,4 @@ Collate:
     'pvLogistic.R'
     'sr-data.R'
     'nADR.R'
+    'cv.glmnet.pvInd.R'

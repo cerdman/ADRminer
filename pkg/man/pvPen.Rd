@@ -10,20 +10,16 @@
     NULL, \dots)
 }
 \arguments{
-  \item{object}{an object of class PvInd}
-
-  \item{covId}{a character vector indicating which
-  covariate have to be used in the analyses. As current
-  implementation of the lasso (glmnet) does not Such
-  variables are first use in a logistic regression model
-  and the residual is then used as the outcome in the
-  penalized regression}
+  \item{object}{an object of class pvInd}
 
   \item{aeId}{The label of the adverse event to be
   regressed. By default, the \code{pvPen} will regress all
   ae, one at a time and this can be very time consuming and
   RAM demanding. This parameter can be either the name of
   the ae(s), or the index of the ae column}
+
+  \item{covId}{a character vector indicating which
+  covariate have to be used in the analyses.}
 
   \item{criter}{Can be either BIC or AIC. These criteria
   are used to select the final model.}
@@ -45,8 +41,8 @@
   \item{nCores}{If parallel is true, allows to specify the
   number of cores to be used for parallel computing.}
 
-  \item{...}{Further arguments to be passed to other
-  functions (None for the moment)}
+  \item{...}{Further arguments to be passed (None for the
+  moment)}
 }
 \description{
   pvPen implements a detection strategy based on the use of

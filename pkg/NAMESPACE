@@ -1,3 +1,4 @@
+export(cv.glmnet.pvInd)
 export(gps.pvCont)
 export(gps.pvInd)
 export(gps)

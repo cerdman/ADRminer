@@ -10,17 +10,15 @@
 #'  \item selection on the drug associated with the ae of interest according to the BIC. 
 #'  }
 #'  This function heavily relies on the highly efficient \code{glmnet} package. \code{pvPen} is computationnaly highly demanding. It is also strongly advised to use a linux or a mac computer in order to use several cores. Note also that this regression approach should be used with ae and drugs both having a reasonable number of reports. 
-#' @param object an object of class PvInd
-#' @param covId a character vector indicating which covariate have to be used in the analyses. As current implementation of the lasso (glmnet) does not 
-#' Such variables are first use in a logistic regression model and the residual is then used as the outcome 
-#' in the penalized regression
+#' @param object an object of class pvInd
 #' @param aeId The label of the adverse event to be regressed. By default, the \code{pvPen} will regress all ae, one at a time and this can be very time consuming and RAM demanding. This parameter can be either the name of the ae(s), or the index of the ae column
+#' @param covId a character vector indicating which covariate have to be used in the analyses.
 #' @param criter Can be either BIC or AIC. These criteria are used to select the final model.
 #' @param posConst If TRUE (default), the regression coefficients are constrained to be non non negative, this to ensure that the final model only contains drugs "increasing" the risk of a given ae.
 #' @param nDrugMax Maximum number of drugs to be included in the model. In addition to be computationnaly intensive, odels with to many drugs are likely to be very unstable.
 #' @param parallel Whether parallel computations should be used to speed up the calculation. Be careful as it will be more RAM demanding. Only available for linux or Mac Os
 #' @param nCores If parallel is true, allows to specify the number of cores to be used for parallel computing.
-#' @param ... Further arguments to be passed to other functions (None for the moment)
+#' @param ... Further arguments to be passed  (None for the moment)
 #' @export
 #' @usage
 #' \method{pvPen}{pvInd}(object, aeId = "all", covId = NULL, criter = c("BIC", "AIC", "eBIC"), posConst = TRUE, nDrugMax = 20, parallel = require(parallel), nCores = NULL, \dots)
@@ -69,7 +67,7 @@ pvPen.pvInd <- function(object, aeId = "all", covId = NULL, criter = c("BIC", "A
     }    
   }
   
-  resGlmnet <- vector("list", length = nAe)  
+
   if(!is.null(covId)){
     penalty.factor <- c(rep(0, ncol(covGlmnet)), rep(1, ncol(x)))
     lower.limits <- c(rep(-Inf, ncol(covGlmnet)), rep(lower.limit, ncol(x)))
@@ -84,6 +82,7 @@ pvPen.pvInd <- function(object, aeId = "all", covId = NULL, criter = c("BIC", "A
   nParam <- vector("list", length = nAe)
   resGlm <- vector("list", length = nAe)
   jerrGlmnet <- vector("numeric", length = nAe)
+  resGlmnet <- vector("list", length = nAe)  
   
   # Glmnet adjustment -------------------------------------------------------
   

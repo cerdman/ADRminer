@@ -6,3 +6,6 @@ documenter les classes
 #' 
 # multiple regression.
 # biclustering
+# slot aide pvInd
+
+# fonction as.dummy for pvInd covariates
