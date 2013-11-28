@@ -4,7 +4,7 @@
 \title{Cross-validation for glmnet and pvInd object}
 \usage{
   cv.glmnet.pvInd(object, aeId = "all", covId = NULL,
-    posConst = TRUE, nDrugMax = 20, ...)
+    posConst = TRUE, nDrugMax = 20, parallel = FALSE, ...)
 }
 \arguments{
   \item{object}{an object of class pvInd}
@@ -27,8 +27,13 @@
   the model. In addition to be computationnaly intensive,
   odels with to many drugs are likely to be very unstable.}
 
+  \item{parallel}{Whether parallel computations should be
+  used to speed up the calculation. Be careful as it will
+  be more RAM demanding. Only available for linux or Mac
+  Os}
+
   \item{...}{Further arguments to be passed to the
-  cv.glmnet function}
+  cv.glmnet function (not in use for now)}
 }
 \description{
   This function is mainly a wrapper of the cv.glmnet

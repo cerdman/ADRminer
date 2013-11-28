@@ -80,7 +80,9 @@ pvPen.pvInd <- function(object, aeId = "all", covId = NULL, criter = c("BIC", "A
   aic <- vector("list", length = nAe)
   ebic <- vector("list", length = nAe)
   nParam <- vector("list", length = nAe)
-  resGlm <- vector("list", length = nAe)
+  resGlmBIC <- vector("list", length = nAe)
+  resGlmAIC <- vector("list", length = nAe)
+  resGlmEBIC <- vector("list", length = nAe)
   jerrGlmnet <- vector("numeric", length = nAe)
   resGlmnet <- vector("list", length = nAe)  
   
@@ -145,14 +147,24 @@ pvPen.pvInd <- function(object, aeId = "all", covId = NULL, criter = c("BIC", "A
         nParam[[i]][j] <- ncol(xGlm[[j]])+1
         ebic[[i]][j] <- bic[[i]][j] + 2 * lchoose(nD,nParam[[i]][j])
       }
-      idxMin <- switch(criter, 
-                       BIC =  which.min(bic[[i]]),
-                       AIC =  which.min(aic[[i]]),
-                       eBIC = which.min(ebic[[i]])
-      )
+#       idxMin <- switch(criter, 
+#                        BIC =  which.min(bic[[i]]),
+#                        AIC =  which.min(aic[[i]]),
+#                        eBIC = which.min(ebic[[i]])
+#       )
+#       
+#       if (idxMin == nGlm) warning(paste("The best", criter, "is obtained with about nDrugMax variables."))
+#       resGlm[[i]] <- res[[idxMin]]
+      idxMinBIC <-  which.min(bic[[i]])
+      idxMinAIC <-  which.min(aic[[i]])
+      idxMinEBIC <- which.min(ebic[[i]])
+      if (idxMinBIC == nGlm) warning("The best BIC is obtained with about nDrugMax variables.")
+      if (idxMinAIC == nGlm) warning("The best AIC is obtained with about nDrugMax variables.")
+      resGlmBIC[[i]] <- res[[idxMinBIC]]
+      resGlmEBIC[[i]] <- res[[idxMinEBIC]]
+      resGlmAIC[[i]] <- res[[idxMinAIC]]
       
-      if (idxMin == nGlm) warning(paste("The best", criter, "is obtained with about nDrugMax variables."))
-      resGlm[[i]] <- res[[idxMin]]
+      
     } ## en if on check glmnet convergence
   } ## end loop on AE
   
@@ -165,8 +177,10 @@ pvPen.pvInd <- function(object, aeId = "all", covId = NULL, criter = c("BIC", "A
     resFinal[[i]]$eBIC <- ebic[[i]]
     resFinal[[i]]$jerrGlmnet <- jerrGlmnet[i]
     resFinal[[i]]$nParam <- nParam[[i]]
-    resFinal[[i]]$glmnet <- resGlmnet[[i]]  
-    resFinal[[i]]$bestGlm <- resGlm[[i]]
+    #resFinal[[i]]$glmnet <- resGlmnet[[i]]  
+    resFinal[[i]]$bestGlmBIC <- resGlmBIC[[i]]
+    resFinal[[i]]$bestGlmEBIC <- resGlmEBIC[[i]]
+    resFinal[[i]]$bestGlmAIC <- resGlmAIC[[i]]
   }
   if (nAe == 1) {
     resFinal <- unlist(resFinal, recursive = F)

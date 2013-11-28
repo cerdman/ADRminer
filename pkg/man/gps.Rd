@@ -17,8 +17,8 @@
   \method{gps}{pvInd}(object, rr0=1,
     assocMeasure=c("postH0","lb05","postE"),
     detectCriter=c("FDR","nSig","assocMeasure"),
-    criterThres = 0.05, strat=NULL, nMin=1, truncThres =
-    NULL, hyperparamInit = c(alpha1= 0.2, beta1= 0.06,
+    criterThres = 0.05, strat=NULL, nMin=1, truncThres = 0,
+    hyperparamInit = c(alpha1= 0.2, beta1= 0.06,
     alpha2=1.4, beta2=1.8, w=0.1), hyperparam = NULL,
     allRes=F, \dots)
 }
@@ -47,15 +47,16 @@
 
   \item{truncThres}{Used for the hyper parameter
   calculations. The marginal likelihood involves mixtures
-  of two (possibly truncated) negative binomial. Default
-  value is set to 0 as the information regarding drug-event
-  pairs not associated with any adr is not used. By setting
-  \code{truncThres} to NULL, the whole contingency table is
-  rebuild and all data (thus including the 0s) are used to
-  estimate the hyperparameters. in order to account for
-  that drug-event pairs associated with no spontaneous
-  reports are usually not represented in the data. In order
-  not to use any truncation, set \code{truncThres} to NULL}
+  of two (possibly truncated) negative binomial. Using a
+  value of t for this parameter means that only sr
+  associated with strictly more than t (>t) reports will be
+  used and that the likelihood is a mixture of truncated
+  negative binomial. Default value is set to 0 as the
+  information regarding drug-event pairs not associated
+  with any adr is not used. By setting \code{truncThres} to
+  NULL, the whole contingency table is rebuild and all data
+  (thus including the 0s) are used to estimate the
+  hyperparameters.}
 
   \item{hyperparamInit}{Initialization vector for the prior
   mixture parameters (alpha1, beta1, alpha2, beta2, w). By

@@ -43,13 +43,17 @@ pvIndResize <- function(pvIndObj, drugId=NULL, aeId=NULL, aeMarginMin=1, drugMar
   
   if (aeMarginMin>1){
     idxAe <- which(pvInd@aeMargin < aeMarginMin)
-    pvInd@ae <- pvInd@ae[,-idxAe]
-    pvInd@aeMargin <- pvInd@aeMargin[-idxAe]
+    if (length(idxAe)>0){
+      pvInd@ae <- pvInd@ae[,-idxAe]
+      pvInd@aeMargin <- pvInd@aeMargin[-idxAe]
+    }
   }
   if (aeMarginMin>1){
     idxD <- which(pvInd@drugMargin < drugMarginMin)
-    pvInd@drug <- pvInd@drug[,-idxD]
-    pvInd@drugMargin <- pvInd@drugMargin[-idxD]
+    if (length(idxD)>0){
+      pvInd@drug <- pvInd@drug[,-idxD]
+      pvInd@drugMargin <- pvInd@drugMargin[-idxD]
+    }
   }
   return(pvInd)
 }

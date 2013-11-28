@@ -6,10 +6,11 @@
 #' @param covId a character vector indicating which covariate have to be used in the analyses. 
 #' @param posConst If TRUE (default), the regression coefficients are constrained to be non non negative, this to ensure that the final model only contains drugs "increasing" the risk of a given ae.
 #' @param nDrugMax Maximum number of drugs to be included in the model. In addition to be computationnaly intensive, odels with to many drugs are likely to be very unstable.
-#' @param ... Further arguments to be passed to the cv.glmnet function 
+#' @param parallel Whether parallel computations should be used to speed up the calculation. Be careful as it will be more RAM demanding. Only available for linux or Mac Os
+#' @param ... Further arguments to be passed to the cv.glmnet function (not in use for now)
 #' @export
 
-cv.glmnet.pvInd <- function(object, aeId = "all", covId = NULL, posConst = TRUE, nDrugMax = 20, ...){
+cv.glmnet.pvInd <- function(object, aeId = "all", covId = NULL, posConst = TRUE, nDrugMax = 20, parallel = FALSE, ...){
   if(!inherits(object, "pvInd")) stop("x must be a pvInd object.")
   lower.limit <- ifelse(posConst, 0, -Inf)
   pvPenCall = match.call(expand.dots = TRUE)
@@ -50,7 +51,7 @@ cv.glmnet.pvInd <- function(object, aeId = "all", covId = NULL, posConst = TRUE,
   }
   
   
-  jerrGlmnet <- vector("numeric", length = nAe)
+  #jerrGlmnet <- vector("numeric", length = nAe)
   resGlmnet <- vector("list", length = nAe) 
   
   for(i in 1:nAe){
@@ -58,11 +59,17 @@ cv.glmnet.pvInd <- function(object, aeId = "all", covId = NULL, posConst = TRUE,
     y <- as.numeric(ae[,i])
     
     if(!is.null(covId)){
-      resGlmnet[[i]] <- cv.glmnet(cBind(covGlmnet,x), y, family="binomial", standardize = F, penalty.factor = penalty.factor, dfmax = nDrugMax, lower.limits = lower.limits, ...)
+      resGlmnet[[i]] <- cv.glmnet(cBind(covGlmnet,x), y, family="binomial", standardize = F, penalty.factor = penalty.factor, dfmax = nDrugMax, lower.limits = lower.limits, parallel=parallel, ...)
     }else{
-      resGlmnet[[i]] <- cv.glmnet(x, y, family = "binomial", standardize = F, dfmax = nDrugMax, lower.limits = lower.limits, ...)
+      resGlmnet[[i]] <- cv.glmnet(x, y, family = "binomial", standardize = F, dfmax = nDrugMax, lower.limits = lower.limits, parallel=parallel, ...)
     }
-    jerrGlmnet[i] <- resGlmnet[[i]]$jerr    
+    #jerrGlmnet[i] <- resGlmnet[[i]]$jerr    
   }  
-  return(resGlmnet)
+  if (nAe == 1) {
+    res <- resGlmnet[[1]]
+  }else{
+    res <- resGlmnet
+    names(resGlmnet) <- colnames(ae)
+  }
+  return(res)
 }
