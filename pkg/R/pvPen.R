@@ -177,10 +177,11 @@ pvPen.pvInd <- function(object, aeId = "all", covId = NULL, criter = c("BIC", "A
     resFinal[[i]]$eBIC <- ebic[[i]]
     resFinal[[i]]$jerrGlmnet <- jerrGlmnet[i]
     resFinal[[i]]$nParam <- nParam[[i]]
-    #resFinal[[i]]$glmnet <- resGlmnet[[i]]  
-    resFinal[[i]]$bestGlmBIC <- coefficients(summary(resGlmBIC[[i]]))
-    resFinal[[i]]$bestGlmEBIC <- coefficients(summary(resGlmEBIC[[i]]))
-    resFinal[[i]]$bestGlmAIC <- coefficients(summary(resGlmAIC[[i]]))
+    resFinal[[i]]$glmnet <- resGlmnet[[i]]  
+    #print(resGlmBIC[[i]])
+    resFinal[[i]]$bestGlmBIC <- ifelse(is.null(resGlmBIC[[i]]), NA, coefficients(summary(resGlmBIC[[i]])))
+    resFinal[[i]]$bestGlmEBIC <- ifelse(is.null(resGlmEBIC[[i]]), NA, coefficients(summary(resGlmEBIC[[i]])))
+    #resFinal[[i]]$bestGlmAIC <- coefficients(summary(resGlmAIC[[i]]))
   }
   if (nAe == 1) {
     resFinal <- unlist(resFinal, recursive = F)
