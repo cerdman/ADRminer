@@ -179,8 +179,10 @@ pvPen.pvInd <- function(object, aeId = "all", covId = NULL, criter = c("BIC", "A
     resFinal[[i]]$nParam <- nParam[[i]]
     resFinal[[i]]$glmnet <- resGlmnet[[i]]  
     #print(resGlmBIC[[i]])
-    resFinal[[i]]$bestGlmBIC <- ifelse(is.null(resGlmBIC[[i]]), NA, coefficients(summary(resGlmBIC[[i]])))
-    resFinal[[i]]$bestGlmEBIC <- ifelse(is.null(resGlmEBIC[[i]]), NA, coefficients(summary(resGlmEBIC[[i]])))
+    
+    if (!is.null(resGlmBIC[[i]])) resFinal[[i]]$bestGlmBIC <- coefficients(summary(resGlmBIC[[i]]))
+    if (!is.null(resGlmEBIC[[i]])) resFinal[[i]]$bestGlmEBIC <- coefficients(summary(resGlmEBIC[[i]]))
+    #resFinal[[i]]$bestGlmEBIC <- ifelse(is.null(resGlmEBIC[[i]]), NA, coefficients(summary(resGlmEBIC[[i]])))
     #resFinal[[i]]$bestGlmAIC <- coefficients(summary(resGlmAIC[[i]]))
   }
   if (nAe == 1) {
@@ -188,7 +190,7 @@ pvPen.pvInd <- function(object, aeId = "all", covId = NULL, criter = c("BIC", "A
   }else{
     names(resFinal) <- colnames(ae)
   }
-  
+  print(resGlmBIC)
   resFinal  
 }
 
