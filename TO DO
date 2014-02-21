@@ -9,5 +9,6 @@ documenter les classes
 # slot aide pvInd
 
 # fonction as.dummy for pvInd covariates
+# Remplacer le glm dans la fonction pvPen par un glmnet avec lambda=0
 
 # 

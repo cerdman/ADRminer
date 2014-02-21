@@ -156,13 +156,13 @@ pvPen.pvInd <- function(object, aeId = "all", covId = NULL, criter = c("BIC", "A
 #       if (idxMin == nGlm) warning(paste("The best", criter, "is obtained with about nDrugMax variables."))
 #       resGlm[[i]] <- res[[idxMin]]
       idxMinBIC <-  which.min(bic[[i]])
-      idxMinAIC <-  which.min(aic[[i]])
+      #idxMinAIC <-  which.min(aic[[i]])
       idxMinEBIC <- which.min(ebic[[i]])
       if (idxMinBIC == nGlm) warning("The best BIC is obtained with about nDrugMax variables.")
-      if (idxMinAIC == nGlm) warning("The best AIC is obtained with about nDrugMax variables.")
+      #if (idxMinAIC == nGlm) warning("The best AIC is obtained with about nDrugMax variables.")
       resGlmBIC[[i]] <- res[[idxMinBIC]]
       resGlmEBIC[[i]] <- res[[idxMinEBIC]]
-      resGlmAIC[[i]] <- res[[idxMinAIC]]
+      #resGlmAIC[[i]] <- res[[idxMinAIC]]
       
       
     } ## en if on check glmnet convergence
@@ -173,15 +173,23 @@ pvPen.pvInd <- function(object, aeId = "all", covId = NULL, criter = c("BIC", "A
   for (i in 1: nAe){
     resFinal[[i]] <- vector("list")
     resFinal[[i]]$BIC <- bic[[i]]
-    resFinal[[i]]$AIC <- aic[[i]]
+    #resFinal[[i]]$AIC <- aic[[i]]
     resFinal[[i]]$eBIC <- ebic[[i]]
     resFinal[[i]]$jerrGlmnet <- jerrGlmnet[i]
     resFinal[[i]]$nParam <- nParam[[i]]
     resFinal[[i]]$glmnet <- resGlmnet[[i]]  
     #print(resGlmBIC[[i]])
     
-    if (!is.null(resGlmBIC[[i]])) resFinal[[i]]$bestGlmBIC <- coefficients(summary(resGlmBIC[[i]]))
-    if (!is.null(resGlmEBIC[[i]])) resFinal[[i]]$bestGlmEBIC <- coefficients(summary(resGlmEBIC[[i]]))
+    if (!is.null(resGlmBIC[[i]])) {
+      resFinal[[i]]$bestGlmBIC <- coefficients(summary(resGlmBIC[[i]]))
+    }else{
+      resFinal[[i]]$bestGlmBIC <- NA
+    }
+    if (!is.null(resGlmEBIC[[i]])) {
+      resFinal[[i]]$bestGlmEBIC <- coefficients(summary(resGlmEBIC[[i]]))
+    }else{
+      resFinal[[i]]$bestGlmEBIC <- NA
+    }
     #resFinal[[i]]$bestGlmEBIC <- ifelse(is.null(resGlmEBIC[[i]]), NA, coefficients(summary(resGlmEBIC[[i]])))
     #resFinal[[i]]$bestGlmAIC <- coefficients(summary(resGlmAIC[[i]]))
   }
