@@ -77,7 +77,7 @@ setMethod(
     }
     return(x)
   }
-) # end na.omit method for pvInd
+) # end naRm method for pvInd
   
 
 
