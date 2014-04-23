@@ -1,0 +1,127 @@
+#' @title pvInd
+#' @encoding UTF-8
+#' @name pvInd
+#' @description This function (which takes the same name that its corresponding formal class \code{\link{pvInd-class}}) should be used to convert a data.frame containing individual spontaneous reports (and optionnaly supplementary individual information) into an pvInd object.
+#' @param adr a data.frame with three columns:
+# \itemize{
+# \item spontaneous report identifier
+# \item drug label
+# \item adverse event label
+# }
+#' @param cov data.frame which contains individual covariates that can be used for stratified analysis. It is assumed that the first column of the data.frame corresponds to the spontaneous report identifier.
+#' @param ... not of any use
+#' @description \code{pvInd} is used to convert raw data  (\code{adr} and ) \code{cov}) into an pvInd object that can be used in the signal detection method functions.
+#' @author Ismaïl Ahmed
+#' @return a pvInd object
+#' @keywords pvInd
+#' @export
+#' @docType methods
+#' @aliases pvInd,data.frame,missing-method pvInd,data.frame,data.frame-method
+#' @seealso \code{\link{pvInd-class}}
+
+# @param drugMarginLim Minimum number of spontaneous reports for a drug to be included (default is 1)
+# @param aeMarginLim Minimum number of spontaneous reports for an adverse event to be included (default is 1) 
+
+
+# pvInd method definition ---------------------------------------------------- 
+
+setGeneric(
+  name="pvInd",
+  def=function(adr, cov, ...){standardGeneric("pvInd")}
+)
+
+
+setMethod(
+  f="pvInd",
+  signature = c(adr = "data.frame", cov = "missing"),
+  definition = function(adr, cov){
+    
+    if(nrow(adr)==0) { stop("adr must contain at least one row")}
+    if(ncol(adr)!=3) { stop("adr must contain three columns")}
+    
+    adr[,1] <- factor(adr[,1])
+    adr[,2] <- factor(adr[,2])
+    adr[,3] <- factor(adr[,3])
+    
+    # drug Matrix
+    colnD <- levels(adr[,2])
+    rownD <- levels(adr[,1])
+    idxR <- as.numeric(adr[,1])
+    idxC <- as.numeric(adr[,2])
+    sD <- sparseMatrix(idxR,idxC,x=1)
+    sD[sD>1] <- 1
+    rownames(sD) <- rownD
+    colnames(sD) <- colnD
+    
+    # ae Mat
+    colnD <- levels(adr[,3])
+    idxC <- as.numeric(adr[,3])
+    sAe <- sparseMatrix(idxR,idxC,x=1)
+    sAe[sAe>1] <- 1
+    rownames(sAe) <- rownD
+    colnames(sAe) <- colnD
+    
+    nSp <- nrow(sD)
+    drugMargin <- as.numeric(Matrix(1, nrow=1, ncol=nSp) %*% sD)
+    aeMargin <- as.numeric(Matrix(1, nrow=1, ncol=nSp) %*% sAe)
+    
+#     if (ncol(adr)>3){
+#       sel <- !duplicated(adr[,1])
+#       cov <- adr[sel, 4:ncol(adr), drop=F]
+#       rownames(cov) <- as.character(adr[sel,1])
+#     }
+    cov <-data.frame()
+    pvInd<-new(Class="pvInd", drug=sD, ae=sAe, drugMargin=drugMargin, aeMargin=aeMargin, cov=cov)
+    return(pvInd)
+  }
+)
+
+
+setMethod(
+  f="pvInd",
+  signature = c(adr = "data.frame", cov="data.frame"),
+  definition = function(adr, cov){
+    if(nrow(adr)==0) { stop("adr must contain at least one row")}
+    if(ncol(adr)!=3) { stop("adr must contain three columns")}
+    
+    adr[,1] <- factor(adr[,1])
+    adr[,2] <- factor(adr[,2])
+    adr[,3] <- factor(adr[,3])
+    
+    # drug Matrix
+    colnD <- levels(adr[,2])
+    rownD <- levels(adr[,1])
+    idxR <- as.numeric(adr[,1])
+    idxC <- as.numeric(adr[,2])
+    sD <- sparseMatrix(idxR,idxC,x=1)
+    sD[sD>1] <- 1
+    rownames(sD) <- rownD
+    colnames(sD) <- colnD
+    
+    # ae Mat
+    colnD <- levels(adr[,3])
+    idxC <- as.numeric(adr[,3])
+    sAe <- sparseMatrix(idxR,idxC,x=1)
+    sAe[sAe>1] <- 1
+    rownames(sAe) <- rownD
+    colnames(sAe) <- colnD
+    
+    nSp <- nrow(sD)
+    drugMargin <- as.numeric(Matrix(1, nrow=1, ncol=nSp) %*% sD)
+    aeMargin <- as.numeric(Matrix(1, nrow=1, ncol=nSp) %*% sAe)
+    
+    if (ncol(cov)>0){
+      idx <- match(row.names(sAe), as.character(cov[,1]))
+      if(sum(is.na(idx))) warning("Some observations are missing or mismatch between adr and covariates datasets")
+      covSort <- cov[idx,]
+      row.names(covSort) <- covSort[,1]
+      covSort <- covSort[,-1]      
+    }else{
+      covSort <- data.frame()
+    }
+    pvInd<-new(Class="pvInd", drug=sD, ae=sAe, drugMargin=drugMargin, aeMargin=aeMargin, cov=covSort)
+    return(pvInd)
+  }
+)
+
+          

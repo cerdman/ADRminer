@@ -1,0 +1,35 @@
+\docType{methods}
+\encoding{UTF-8}
+\name{nADR}
+\alias{nADR}
+\alias{nADR.pvCont}
+\alias{nADR.pvInd}
+\title{Number of adverse drug reaction associated with adverse event drug pair}
+\usage{
+\method{nADR}{pvCont}(object, drugId, aeId, \dots)
+\method{nADR}{pvInd}(object, drugId, aeId, \dots)
+}
+\arguments{
+  \item{object}{an object of class pvInd or pvCont}
+
+  \item{drugId}{the label of the drug of interest
+  (character)}
+
+  \item{aeId}{the label of the adverse event of interest
+  (character)}
+
+  \item{...}{not of any use for now.}
+}
+\value{
+a pvInd object
+}
+\description{
+\code{nADR} allows the user to get the number of
+spontaneous reports associated with an ae - drug pair. It
+works on both pvInd and pvCont object.
+}
+\author{
+Ismaïl Ahmed
+}
+\keyword{pvInd}
+
