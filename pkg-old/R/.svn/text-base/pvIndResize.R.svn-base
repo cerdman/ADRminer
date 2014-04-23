@@ -1,0 +1,26 @@
+#' @encoding UTF-8
+#' @title pvIndResize
+#' @description \code{pvIndResize} makes it possible to remove drug(s) and/or ae(s) whose margin are less
+#' than a given number.
+#' @param PvIndObj an object of class "PvInd" (see \code{\link{PvInd-class}} and \code{\link{pvInd}})
+#' @param aeMarginMin Minimum number of reports in which an ae must be involved in order to be kept
+#' @param dMarginMin Minimum number of reports in which a drug must be involved in order to be kept
+#' @return an object of class PvInd
+#' @author Ismaïl Ahmed
+#' @export
+
+pvIndResize <- function(PvIndObj, aeMarginMin=1, dMarginMin=1){
+  PvInd <- PvIndObj
+  if (!inherits(PvInd, "PvInd")) stop("object must be of class PvInd")
+  if (aeMarginMin>1){
+    idxAe <- which(PvInd@aeMargin < aeMarginMin)
+    PvInd@ae <- PvInd@ae[,-idxAe]
+    PvInd@aeMargin <- PvInd@aeMargin[-idxAe]
+  }
+  if (aeMarginMin>1){
+    idxD <- which(PvInd@dMargin < dMarginMin)
+    PvInd@drug <- PvInd@drug[,-idxD]
+    PvInd@dMargin <- PvInd@dMargin[-idxD]
+  }
+  return(PvInd)
+}

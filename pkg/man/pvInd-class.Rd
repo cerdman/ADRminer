@@ -13,14 +13,29 @@
 \alias{getDrug,pvInd-method}
 \alias{getDrugMargin}
 \alias{getDrugMargin,pvInd-method}
+\alias{naRm}
+\alias{naRm,pvInd-method}
 \alias{names,pvInd-method}
 \alias{pvInd-class}
 \alias{shows,pvInd-method}
 \title{Formal class "pvInd"}
 \description{
-  The class pvInd is a class (S4) for storing individual
-  spontaneous report data.
+The class pvInd is a class (S4) for storing individual
+spontaneous report data.
 }
+\section{Slots}{
+
+\describe{
+\item{\code{drug}}{Drug matrix in sparse format \code{Matrix}.}
+
+\item{\code{ae}}{Adverse Event matrix in sparse format \code{Matrix}.}
+
+\item{\code{drugMargin}}{Vector of the marginal counts for each drug.}
+
+\item{\code{aeMargin}}{Vector of the marginal counts for each ae.}
+
+\item{\code{cov}}{\code{data.frame} containing individual covariates.}
+}}
 \section{Methods}{
   \describe{ \item{names}{\code{signature(x = "pvInd")}:
   returns the names of the slots of the object.}
@@ -39,9 +54,11 @@
   \item{getAeMargin}{\code{signature(x = "pvInd")}: returns
   the adverse event margin counts.}
   \item{getCov}{\code{signature(x = "pvInd")}: returns the
-  covariate data.frame.} }
+  covariate data.frame.} \item{na.omit}{\code{signature(x =
+  "pvInd")}: remove spontaneous reports with NA values in
+  the covariate slot.} }
 }
 \author{
-  Youness Ergaibi & Ismaïl Ahmed
+Youness Ergaibi & Ismaïl Ahmed
 }
 

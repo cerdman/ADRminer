@@ -9,10 +9,9 @@
 #' @author Ismaïl Ahmed
 #' @return a pvInd object
 #' @keywords pvInd
-#' @export
 #' @docType methods
-#' @aliases nADR.pvInd
-#' @aliases nADR.pvCont
+#' @export
+#' @aliases nADR.pvInd nADR.pvCont
 #' @usage
 #' \method{nADR}{pvCont}(object, drugId, aeId, \dots)
 #' \method{nADR}{pvInd}(object, drugId, aeId, \dots)
@@ -21,7 +20,6 @@
 nADR <- function (object, drugId, aeId, ...) UseMethod("nADR")
 
 # nADR pvInd----------------------------------------------------------------
-#' @export
 nADR.pvInd <- function(object, drugId, aeId, ...){
   if (!is.character(drugId)) stop("drugId must be a character")
   if (length(drugId)>1) stop("For now, nADR only handle one drug at a time")
@@ -38,7 +36,7 @@ nADR.pvInd <- function(object, drugId, aeId, ...){
 }
   
 # nADR pvCont----------------------------------------------------------------
-#' @export
+
 nADR.pvCont <- function(object, drugId, aeId, ...){
   if (!is.character(drugId)) stop("drugId must be a character")
   if (length(drugId)>1) stop("For now, nADR only handle one drug at a time")

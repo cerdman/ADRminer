@@ -7,6 +7,9 @@
 \alias{pvCont,pvInd,character-method}
 \alias{pvCont,pvInd,missing-method}
 \title{pvCont}
+\usage{
+pvCont(object, strat)
+}
 \arguments{
   \item{object}{a pvInd object or a data.frame. The latter
   should have 3 columns, i.e. the drug labels, the ae
@@ -19,13 +22,13 @@
   pvInd object.}
 }
 \value{
-  an object of class \code{\link{pvCont}}.
+an object of class \code{\link{pvCont}}.
 }
 \description{
-  pvCont converts an pvInd object into pvCont object.
+pvCont converts an pvInd object into pvCont object.
 }
 \author{
-  Ismaïl Ahmed
+Ismaïl Ahmed
 }
 \keyword{pvCont}
 

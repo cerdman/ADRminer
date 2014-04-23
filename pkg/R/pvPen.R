@@ -13,7 +13,7 @@
 #' @param object an object of class pvInd
 #' @param aeId The label of the adverse event to be regressed. By default, the \code{pvPen} will regress all ae, one at a time and this can be very time consuming and RAM demanding. This parameter can be either the name of the ae(s), or the index of the ae column
 #' @param covId a character vector indicating which covariate have to be used in the analyses.
-#' @param criter Can be either BIC or AIC. These criteria are used to select the final model.
+# @param criter Can be either BIC or AIC. These criteria are used to select the final model.
 #' @param posConst If TRUE (default), the regression coefficients are constrained to be non non negative, this to ensure that the final model only contains drugs "increasing" the risk of a given ae.
 #' @param nDrugMax Maximum number of drugs to be included in the model. In addition to be computationnaly intensive, odels with to many drugs are likely to be very unstable.
 #' @param parallel Whether parallel computations should be used to speed up the calculation. Be careful as it will be more RAM demanding. Only available for linux or Mac Os
@@ -21,8 +21,7 @@
 #' @param ... Further arguments to be passed  (None for the moment)
 #' @export
 #' @usage
-#' \method{pvPen}{pvInd}(object, aeId = "all", covId = NULL, criter = c("BIC", "AIC", "eBIC"), posConst = TRUE, nDrugMax = 20, parallel = require(parallel), nCores = NULL, \dots)
-
+#' \method{pvPen}{pvInd}(object, aeId = "all", covId = NULL, posConst = TRUE, nDrugMax = 20, parallel = require(parallel), nCores = NULL, \dots)
 
 
 # pvPen definition --------------------------------------------------------
@@ -30,13 +29,13 @@ pvPen <- function (object, ...) UseMethod("pvPen")
 
 #' @export
 # pvPen pvInd -------------------------------------------------------------
-pvPen.pvInd <- function(object, aeId = "all", covId = NULL, criter = c("BIC", "AIC", "eBIC"), posConst = TRUE, nDrugMax = 20, parallel = require(parallel), nCores = NULL, ...){
+pvPen.pvInd <- function(object, aeId = "all", covId = NULL,  posConst = TRUE, nDrugMax = 20, parallel = require(parallel), nCores = NULL, ...){
   
   if(parallel && !require(parallel)) stop("parallel package requested but not installed")
   if(parallel && is.null(nCores)) nCores <- parallel::detectCores()
   if (!inherits(object, "pvInd")) stop("object must be of class PvInd")
   
-  criter <- match.arg(criter)
+  #criter <- match.arg(criter)
   lower.limit <- ifelse(posConst, 0, -Inf)
   pvPenCall = match.call(expand.dots = TRUE)
   
@@ -55,16 +54,18 @@ pvPen.pvInd <- function(object, aeId = "all", covId = NULL, criter = c("BIC", "A
     if (!is.character(covId)) stop("covId must be a vector of character")
     idxCov <- match(covId, colnames(object@cov))
     if(sum(is.na(idxCov))) stop("Covariates listed in covId must match these in object (see names(object))")
-    covGlmnet <- c()  
-    for (i in 1:length(cov)){  
+    covGlmnet <- matrix(nrow=nObs, ncol=0)  
+    for (i in 1:length(covId)){  
       if (is.factor(object@cov[[covId[i]]])) {
-        temp <- model.matrix(~object@covId[[cov[i]]]-1)
+        temp <- model.matrix(~object@cov[[covId[i]]]-1)
         colnames(temp) <- paste(covId[i], "_", levels(object@cov[[covId[i]]]), sep = "")
-        covGlmnet <- cbind(covGlmnet, temp[,-1])
+        covGlmnet <- cbind(covGlmnet, temp[,-1, drop=F])
       } else  {
         covGlmnet <- cbind(covGlmnet, object@cov[,covId[i], drop = F])
       }
-    }    
+    }
+    if (sum(is.na(covGlmnet))) stop("pvPen does not handle missing values")
+    covGlmnet <- Matrix(as.matrix(covGlmnet), sparse=T)
   }
   
 
@@ -74,7 +75,6 @@ pvPen.pvInd <- function(object, aeId = "all", covId = NULL, criter = c("BIC", "A
   }else{
     lower.limits <- lower.limit
   }
-  
   dev <- vector("list", length = nAe)
   bic <- vector("list", length = nAe)
   aic <- vector("list", length = nAe)
@@ -93,17 +93,17 @@ pvPen.pvInd <- function(object, aeId = "all", covId = NULL, criter = c("BIC", "A
     y <- as.numeric(ae[,i])
     
     if(!is.null(covId)){
-      resGlmnet[[i]] <- glmnet(cBind(covGlmnet,x), y, family="binomial", standardize = F, penalty.factor = penalty.factor, dfmax = nDrugMax, lower.limits = lower.limits, ...)
+      xCov <- cBind(covGlmnet,x)
+      resGlmnet[[i]] <- glmnet(xCov, y, family="binomial", standardize = F, penalty.factor = penalty.factor, dfmax = nDrugMax, lower.limits = lower.limits, ...)
     }else{
       resGlmnet[[i]] <- glmnet(x, y, family = "binomial", standardize = F, dfmax = nDrugMax, lower.limits = lower.limits, ...)
     }
     jerrGlmnet[i] <- resGlmnet[[i]]$jerr
-    
     if ((jerrGlmnet[i] == 0) && (max(resGlmnet[[i]]$df>0)))  { ## check convergence of glmnet
       
       idxDf <- !duplicated(resGlmnet[[i]]$df)
       betaCoef <- resGlmnet[[i]]$beta[,idxDf] != 0
-      betaCoef <- betaCoef[,apply(betaCoef,2,sum) >= 1] #remove s0
+      betaCoef <- betaCoef[,apply(betaCoef,2,sum) >= 1] #remove s0 ## betacoef contains the coef for the covariates
       
       nGlm <- ncol(betaCoef)
       res <- vector("list", length = nGlm)
@@ -129,22 +129,27 @@ pvPen.pvInd <- function(object, aeId = "all", covId = NULL, criter = c("BIC", "A
         xGlm <- vector("list", length = nGlm)
         for (j in 1:nGlm) {
           betaSel <- betaCoef[,j] == 1
-          xGlm[[j]] <- x[,betaSel, drop = F]
+          if(!is.null(covId)){
+            xGlm[[j]] <- as.matrix(cBind(covGlmnet,x)[,betaSel])
+          }else{
+            xGlm[[j]] <- as.matrix(x[,betaSel])
+          }
           colnames(xGlm[[j]]) <- row.names(betaCoef)[betaSel]
+          xGlm[[j]] <- as.data.frame(xGlm[[j]]) 
         }
         
-        if(!is.null(covId)){
-          res <- mclapply(xGlm, .glmPar, y = y, cov = object@cov[, covId], mc.cores = nCores)
-        }else{
-          res <- mclapply(xGlm, .glmPar, y = y, cov = NULL, mc.cores = nCores)
-        }
+        #if(!is.null(covId)){
+        #  res <- mclapply(xGlm, .glmPar, y = y, cov = object@cov[, covId], mc.cores = nCores)
+        #}else{
+          res <- mclapply(xGlm, .glmPar, y = y, mc.cores = nCores)
+        #}
       } ## end if PARALLEL
       for (j in 1:nGlm) { ## Best Glm model
         dev[[i]][j] <- res[[j]]$deviance
         #bic[[i]][j] <- dev[[i]][j] + (ncol(xGlm[[j]])+1)*log(nObs)
         bic[[i]][j] <- BIC(res[[j]])
         aic[[i]][j] <- AIC(res[[j]])      
-        nParam[[i]][j] <- ncol(xGlm[[j]])+1
+        nParam[[i]][j] <- length(res[[j]]$coefficients)
         ebic[[i]][j] <- bic[[i]][j] + 2 * lchoose(nD,nParam[[i]][j])
       }
 #       idxMin <- switch(criter, 
@@ -178,7 +183,6 @@ pvPen.pvInd <- function(object, aeId = "all", covId = NULL, criter = c("BIC", "A
     resFinal[[i]]$jerrGlmnet <- jerrGlmnet[i]
     resFinal[[i]]$nParam <- nParam[[i]]
     resFinal[[i]]$glmnet <- resGlmnet[[i]]  
-    #print(resGlmBIC[[i]])
     
     if (!is.null(resGlmBIC[[i]])) {
       resFinal[[i]]$bestGlmBIC <- coefficients(summary(resGlmBIC[[i]]))
@@ -198,15 +202,22 @@ pvPen.pvInd <- function(object, aeId = "all", covId = NULL, criter = c("BIC", "A
   }else{
     names(resFinal) <- colnames(ae)
   }
-  print(resGlmBIC)
   resFinal  
 }
 
-.glmPar <- function(x, y, cov = NULL, family = "binomial"){
-  x <- as.matrix(x)
-  if (!is.null(cov)) x <- cbind(x, cov)
+
+.glmPar <- function(x, y, family = "binomial"){
   x <- as.data.frame(x)
   res <- glm(y~., data = x, family =  family)
   res
   ## pas de warnings sur les poscontraints
 }
+
+# .glmPar <- function(x, y, cov = NULL, family = "binomial"){
+#   x <- as.matrix(x)
+#   if (!is.null(cov)) x <- cbind(x, cov)
+#   x <- as.data.frame(x)
+#   res <- glm(y~., data = x, family =  family)
+#   res
+#   ## pas de warnings sur les poscontraints
+# }

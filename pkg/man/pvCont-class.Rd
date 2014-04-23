@@ -6,9 +6,9 @@
 \alias{show,pvCont-method}
 \title{pvCont class}
 \description{
-  pvCont class
+pvCont class
 }
 \author{
-  Youness Ergaibi & Ismaïl Ahmed
+Youness Ergaibi & Ismaïl Ahmed
 }
 

@@ -5,8 +5,6 @@
 #' @name sr-data
 #' @docType data
 #' @keywords data
-#' @aliases sr1
-#' @aliases sr2
-#' @aliases covSr1
+#' @aliases sr1 covSr1 sr2
 #' 
-NA
+NULL

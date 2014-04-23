@@ -3,8 +3,8 @@
 \alias{pvIndResize}
 \title{pvIndResize}
 \usage{
-  pvIndResize(pvIndObj, drugId = NULL, aeId = NULL,
-    aeMarginMin = 1, drugMarginMin = 1)
+pvIndResize(pvIndObj, drugId = NULL, aeId = NULL, aeMarginMin = 1,
+  drugMarginMin = 1)
 }
 \arguments{
   \item{pvIndObj}{an object of class "pvInd" (see
@@ -25,14 +25,14 @@
   drug must be involved in order to be kept}
 }
 \value{
-  an object of class pvInd
+an object of class pvInd
 }
 \description{
-  \code{pvIndResize} makes it possible to select sets of
-  drugs and/or aes. It also allows to remove drug(s) and/or
-  ae(s) whose margin are less than a given number.
+\code{pvIndResize} makes it possible to select sets of
+drugs and/or aes. It also allows to remove drug(s) and/or
+ae(s) whose margin are less than a given number.
 }
 \author{
-  Ismaïl Ahmed
+Ismaïl Ahmed
 }
 

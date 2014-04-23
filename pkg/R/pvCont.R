@@ -6,13 +6,12 @@
 #' @description pvCont converts an pvInd object into pvCont object. 
 #' @author Ismaïl Ahmed
 #' @return an object of class \code{\link{pvCont}}.
+#' @include pvCont-class.R
+#' @include pvInd-class.R
 #' @exportMethod pvCont
 #' @keywords pvCont
 #' @docType methods
-#' @aliases pvCont,pvInd,character-method
-#' @aliases pvCont,pvInd,missing-method
-#' @aliases pvCont,data.frame,missing-method
-#' @aliases pvCont,matrix,missing-method
+#' @aliases pvCont,pvInd,character-method pvCont,pvInd,missing-method pvCont,data.frame,missing-method pvCont,matrix,missing-method
 setGeneric(
   name = "pvCont",
   def = function(object, strat){standardGeneric("pvCont")}
@@ -37,7 +36,7 @@ setMethod(
     aeMargin <- matrix(n.1[coord[,2]], ncol=1)
     N <- sum(n11) 
     expN <- drugMargin*aeMargin/N
-    pvCont<-new(Class="pvCont", drugLab=dLab, aeLab=aeLab, n=n11, drugMargin=drugMargin, aeMargin=aeMargin, expN=expN, N=N, strat=NULL, coord=coord)
+    pvCont<-new(Class="pvCont", drugLab=dLab, aeLab=aeLab, n=n11, drugMargin=drugMargin, aeMargin=aeMargin, expN=expN, N=N, strat=character(), coord=coord)
     return(pvCont)
   }  
 )
@@ -113,7 +112,7 @@ setMethod(
     drugMargin <- matrix(n1.[coord[,1]], ncol=1)  # on affecte à chaque notification sa marge "ligne"...
     aeMargin <- matrix(n.1[coord[,2]], ncol=1) # ... et sa marge "colonne"
     expN<-drugMargin*aeMargin/N
-    pvCont<-new(Class="pvCont",drugLab=dLab, aeLab=aeLab, n=n, drugMargin= drugMargin, aeMargin=aeMargin, expN=expN, N=N, strat=NULL)
+    pvCont<-new(Class="pvCont",drugLab=dLab, aeLab=aeLab, n=n, drugMargin= drugMargin, aeMargin=aeMargin, expN=expN, N=N, strat=character())
     return(pvCont)
   }  
 )

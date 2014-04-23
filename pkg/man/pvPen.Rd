@@ -4,10 +4,7 @@
 \alias{pvPen.pvInd}
 \title{Penalized regression detection strategy}
 \usage{
-  \method{pvPen}{pvInd}(object, aeId = "all", covId = NULL,
-    criter = c("BIC", "AIC", "eBIC"), posConst = TRUE,
-    nDrugMax = 20, parallel = require(parallel), nCores =
-    NULL, \dots)
+\method{pvPen}{pvInd}(object, aeId = "all", covId = NULL, posConst = TRUE, nDrugMax = 20, parallel = require(parallel), nCores = NULL, \dots)
 }
 \arguments{
   \item{object}{an object of class pvInd}
@@ -20,9 +17,6 @@
 
   \item{covId}{a character vector indicating which
   covariate have to be used in the analyses.}
-
-  \item{criter}{Can be either BIC or AIC. These criteria
-  are used to select the final model.}
 
   \item{posConst}{If TRUE (default), the regression
   coefficients are constrained to be non non negative, this
@@ -45,19 +39,18 @@
   moment)}
 }
 \description{
-  pvPen implements a detection strategy based on the use of
-  the Lasso regression along with BIC type detection
-  criteria. The methodology follows two main steps:
-  \itemize{ \item Lasso regression (with a positive
-  constraint on the regression coefficients) for a grid of
-  constraint parameters \item selection on the drug
-  associated with the ae of interest according to the BIC.
-  } This function heavily relies on the highly efficient
-  \code{glmnet} package. \code{pvPen} is computationnaly
-  highly demanding. It is also strongly advised to use a
-  linux or a mac computer in order to use several cores.
-  Note also that this regression approach should be used
-  with ae and drugs both having a reasonable number of
-  reports.
+pvPen implements a detection strategy based on the use of
+the Lasso regression along with BIC type detection
+criteria. The methodology follows two main steps: \itemize{
+\item Lasso regression (with a positive constraint on the
+regression coefficients) for a grid of constraint
+parameters \item selection on the drug associated with the
+ae of interest according to the BIC.  } This function
+heavily relies on the highly efficient \code{glmnet}
+package. \code{pvPen} is computationnaly highly demanding.
+It is also strongly advised to use a linux or a mac
+computer in order to use several cores. Note also that this
+regression approach should be used with ae and drugs both
+having a reasonable number of reports.
 }
 

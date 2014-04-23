@@ -1,8 +1,8 @@
 Package: ADRminer
 Type: Package
 Title: ADRminer: Adverse Drug event Reporting systems miner
-Version: 0.711
-Date: 2014-02-12
+Version: 0.75
+Date: 2014-04-23
 Authors@R: c(person("Ismail Ahmed", role = c("aut", "cre"),
     email="ismail.ahmed@inserm.fr"), person("Youness Ergaibi", role="ctb"))
 Description: ADRminer is an R package dedicated to the automated generation of
@@ -17,16 +17,13 @@ Depends:
 Suggests:
     parallel,
 Collate:
-    'ADRminer-package.R'
-    'virtual-class.R'
+    'ADRminer.R'
+    'gps.R'
+    'nADR.R'
     'pvCont-class.R'
     'pvInd-class.R'
-    'pvInd.R'
     'pvCont.R'
-    'gps.R'
-    'pvPen.R'
+    'pvInd.R'
     'pvIndResize.R'
-    'pvLogistic.R'
+    'pvPen.R'
     'sr-data.R'
-    'nADR.R'
-    'cv.glmnet.pvInd.R'

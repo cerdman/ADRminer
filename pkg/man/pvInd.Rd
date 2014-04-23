@@ -5,6 +5,9 @@
 \alias{pvInd,data.frame,data.frame-method}
 \alias{pvInd,data.frame,missing-method}
 \title{pvInd}
+\usage{
+pvInd(adr, cov, ...)
+}
 \arguments{
   \item{adr}{a data.frame with three columns:}
 
@@ -13,28 +16,23 @@
   is assumed that the first column of the data.frame
   corresponds to the spontaneous report identifier.}
 
-  \item{drugMarginLim}{Minimum number of spontaneous
-  reports for a drug to be included (default is 1)}
-
-  \item{aeMarginLim}{Minimum number of spontaneous reports
-  for an adverse event to be included (default is 1)}
+  \item{...}{not of any use}
 }
 \value{
-  a pvInd object
+a pvInd object
 }
 \description{
-  This function (which takes the same name that its
-  corresponding formal class \code{\link{pvInd-class}})
-  should be used to convert a data.frame containing
-  individual spontaneous reports (and optionnaly
-  supplementary individual information) into an pvInd
-  object.
+This function (which takes the same name that its
+corresponding formal class \code{\link{pvInd-class}})
+should be used to convert a data.frame containing
+individual spontaneous reports (and optionnaly
+supplementary individual information) into an pvInd object.
 }
 \author{
-  Ismaïl Ahmed
+Ismaïl Ahmed
 }
 \seealso{
-  \code{\link{pvInd-class}}
+\code{\link{pvInd-class}}
 }
 \keyword{pvInd}
 

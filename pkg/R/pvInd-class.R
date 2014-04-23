@@ -7,17 +7,9 @@
 #' @title pvInd class
 #' @author Youness Ergaibi & Ismaïl Ahmed
 #' @exportClass pvInd
-#' @aliases names,pvInd-method
-#' @aliases shows,pvInd-method
-#' @aliases getDrug,pvInd-method
-#' @aliases getAe,pvInd-method
-#' @aliases getDrugMargin,pvInd-method
-#' @aliases getAeMargin,pvInd-method
-#' @aliases getCov,pvInd-method
-#' @aliases $,pvInd-method
-#' @aliases $<-,pvInd-method
-#' @slot drug Drug matrix in sparse format \link{\code{Matrix}}.
-#' @slot ae Adverse Event matrix in sparse format \link{\code{Matrix}}.
+#' @aliases names,pvInd-method shows,pvInd-method getDrug,pvInd-method getAe,pvInd-method getDrugMargin,pvInd-method getAeMargin,pvInd-method getCov,pvInd-method $,pvInd-method $<-,pvInd-method getDrug getAe getDrugMargin getAeMargin getCov naRm naRm,pvInd-method
+#' @slot drug Drug matrix in sparse format \code{Matrix}.
+#' @slot ae Adverse Event matrix in sparse format \code{Matrix}.
 #' @slot drugMargin Vector of the marginal counts for each drug.
 #' @slot aeMargin Vector of the marginal counts for each ae.
 #' @slot cov \code{data.frame} containing individual covariates.
@@ -32,16 +24,14 @@
 #'  \item{getDrugMargin}{\code{signature(x = "pvInd")}: returns the Drug margin counts.}
 #'  \item{getAeMargin}{\code{signature(x = "pvInd")}: returns the adverse event margin counts.}
 #'  \item{getCov}{\code{signature(x = "pvInd")}: returns the covariate data.frame.}
+#'  \item{naRm}{\code{signature(x = "pvInd")}: remove spontaneous reports with NA values in the covariate slot.}
 #' }
-#### to be changed if applied to several classes
-#' @aliases getDrug getAe getDrugMargin getAeMargin getCov
-
 
 # pvInd Class definition --------------------------------------------------
 setClass(
   "pvInd",
-  representation(drug="dgCMatrix", ae="dgCMatrix", drugMargin="numOrN", aeMargin="numOrN", cov="dfOrN"),
-  prototype(drug=sparseMatrix(1,1,x=0), ae=sparseMatrix(1,1,x=0), drugMargin=numeric(), aeMargin=numeric(), cov=NULL)
+  representation(drug="dgCMatrix", ae="dgCMatrix", drugMargin="numeric", aeMargin="numeric", cov="data.frame"),
+  prototype(drug=sparseMatrix(1,1,x=0), ae=sparseMatrix(1,1,x=0), drugMargin=numeric(), aeMargin=numeric(), cov=data.frame())
 )
 
 .validPvInd <- function(object){
@@ -66,6 +56,31 @@ setValidity("pvInd", .validPvInd)
 setMethod("names", signature(x = "pvInd"), function(x) return(slotNames(x)))# end names method for pvInd
 
 
+# na.omit -------------------------------------------------------------------
+#' @export
+setGeneric("naRm", function(x, ...) standardGeneric("naRm"))
+
+setMethod(
+  "naRm", 
+  signature(x = "pvInd"), 
+  function(x, ...){
+    if (nrow(x@cov)==0) return(x)
+    idxRow <- which(is.na(x@cov), arr.ind=T)[,1]
+    if (length(idxRow>0)) {
+      idxRow <- unique(idxRow)
+      x@drug <- x@drug[-idxRow,]
+      x@ae <- x@ae[-idxRow,]
+      x@cov <- x@cov[-idxRow,]
+      nSp <- nrow(x@drug)
+      x@drugMargin <- as.numeric(Matrix(1, nrow=1, ncol=nSp) %*% x@drug)
+      x@aeMargin <- as.numeric(Matrix(1, nrow=1, ncol=nSp) %*% x@ae)
+    }
+    return(x)
+  }
+) # end na.omit method for pvInd
+  
+
+
 # show --------------------------------------------------------------------
 setMethod(
   "show",
@@ -78,37 +93,40 @@ setMethod(
     print(as.matrix(head(object@ae[,1:6])))  
     #cat("@drugMargin: (length=", length(object@drugMargin), ")", head(object@drugMargin), "\n" , sep="")   
     #cat("@aeMargin: (length=", length(object@aeMargin), ")", head(object@aeMargin), "\n" , sep="")          
-    if(!is.null(object@cov)) {
-      cat("@cov: Covariate data.frame:\n")  
-      print(head(object@cov))
-    }
+    cat("@cov: Covariate data.frame:", nrow(object@cov), "x", ncol(object@cov), "\n" )
+    print(head(object@cov))
   }
 )# end show method for pvInd
 
 
 # 
 # # Accessors ---------------------------------------------------------------
-
+#' @export
 setGeneric("getDrug", function(x, ...) standardGeneric("getDrug"))
+#' @export
 setGeneric("getAe", function(x, ...) standardGeneric("getAe"))
+#' @export
 setGeneric("getDrugMargin", function(x, ...) standardGeneric("getDrugMargin"))
+#' @export
 setGeneric("getAeMargin", function(x, ...) standardGeneric("getAeMargin"))
+#' @export
 setGeneric("getCov", function(x, ...) standardGeneric("getCov"))
+
 # 
 ## getDrug
-#' @export
+
 setMethod("getDrug","pvInd", function(x,...){
   return(x@drug)
 })
 
 ## getAe
-#' @export
+
 setMethod("getAe","pvInd", function(x,...){
   return(x@ae)
 })
 
 ## getDrugMargin
-#' @export
+
 setMethod("getDrugMargin","pvInd", function(x,...){
   return(x@drugMargin)
 })
@@ -126,14 +144,14 @@ setMethod("getCov","pvInd", function(x,...){
 })
 # 
 # ## $
-#' @export
+
 setMethod("$","pvInd",function(x, name) {
 return(slot(x,name))
 })
 # 
 
 ## $<-
-#' @export
+
 setMethod("$<-","pvInd",function(x, name, value) {
   slot(x,name,check=TRUE) <- value
   return(x)

@@ -6,21 +6,9 @@
 \alias{gps.pvInd}
 \title{Gamma Poisson Shrinkage}
 \usage{
-  \method{gps}{pvCont}(object, rr0=1,
-    assocMeasure=c("postH0","lb05","postE"),
-    detectCriter=c("FDR","nSig","assocMeasure"),
-    criterThres = 0.05, nMin=1, truncThres = 0,
-    hyperparamInit = c(alpha1= 0.2, beta1= 0.06,
-    alpha2=1.4, beta2=1.8, w=0.1), hyperparam = NULL,
-    allRes=F, \dots)
+\method{gps}{pvCont}(object, rr0=1, assocMeasure=c("postH0","lb05","postE"), detectCriter=c("FDR","nSig","assocMeasure"), criterThres = 0.05, nMin=1, truncThres = 0, hyperparamInit = c(alpha1= 0.2, beta1= 0.06, alpha2=1.4, beta2=1.8, w=0.1), hyperparam = NULL, allRes=F, \dots)
 
-  \method{gps}{pvInd}(object, rr0=1,
-    assocMeasure=c("postH0","lb05","postE"),
-    detectCriter=c("FDR","nSig","assocMeasure"),
-    criterThres = 0.05, strat=NULL, nMin=1, truncThres = 0,
-    hyperparamInit = c(alpha1= 0.2, beta1= 0.06,
-    alpha2=1.4, beta2=1.8, w=0.1), hyperparam = NULL,
-    allRes=F, \dots)
+\method{gps}{pvInd}(object, rr0=1, assocMeasure=c("postH0","lb05","postE"), detectCriter=c("FDR","nSig","assocMeasure"), criterThres = 0.05, strat=NULL, nMin=1, truncThres = 0, hyperparamInit = c(alpha1= 0.2, beta1= 0.06, alpha2=1.4, beta2=1.8, w=0.1), hyperparam = NULL, allRes=F, \dots)
 }
 \arguments{
   \item{object}{An object of class pvInd or pvCont}
@@ -80,26 +68,26 @@
   functions (None for the moment)}
 }
 \value{
-  allSig Data.frame summarizing the results for all
-  drug-event combinations with at least \code{nMin}
-  spontaneous reports ordered by \code{assocMeasure}. This
-  output is provided if \code{allRes=TRUE}. Operating
-  characteristics are estimated according to Ahmed et al
-  (Stat Med 2009).
+allSig Data.frame summarizing the results for all
+drug-event combinations with at least \code{nMin}
+spontaneous reports ordered by \code{assocMeasure}. This
+output is provided if \code{allRes=TRUE}. Operating
+characteristics are estimated according to Ahmed et al
+(Stat Med 2009).
 
-  sig Same as \code{allSig} but restricted to the list of
-  generated signals.
+sig Same as \code{allSig} but restricted to the list of
+generated signals.
 
-  nSig Number of generated signals.
+nSig Number of generated signals.
 
-  call specified argumetnts
+call specified argumetnts
 }
 \description{
-  Gamma Poisson Shrinkage model proposed by DuMouchel
-  (1999) extended to the multiple comparison framework.
+Gamma Poisson Shrinkage model proposed by DuMouchel (1999)
+extended to the multiple comparison framework.
 }
 \author{
-  Youness Ergaibi & Ismaïl Ahmed
+Youness Ergaibi & Ismaïl Ahmed
 }
 \keyword{gps}
 
