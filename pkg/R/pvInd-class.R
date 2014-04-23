@@ -56,7 +56,7 @@ setValidity("pvInd", .validPvInd)
 setMethod("names", signature(x = "pvInd"), function(x) return(slotNames(x)))# end names method for pvInd
 
 
-# na.omit -------------------------------------------------------------------
+# na.omit -----------------------------------------------------------------
 #' @export
 setGeneric("naRm", function(x, ...) standardGeneric("naRm"))
 
