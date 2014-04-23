@@ -54,7 +54,7 @@ spontaneous report data.
   \item{getAeMargin}{\code{signature(x = "pvInd")}: returns
   the adverse event margin counts.}
   \item{getCov}{\code{signature(x = "pvInd")}: returns the
-  covariate data.frame.} \item{na.omit}{\code{signature(x =
+  covariate data.frame.} \item{naRm}{\code{signature(x =
   "pvInd")}: remove spontaneous reports with NA values in
   the covariate slot.} }
 }

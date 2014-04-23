@@ -4,7 +4,6 @@
 #' @description The class pvInd is a class (S4) for storing individual spontaneous report data. 
 #' @name pvInd-class
 #' @docType class
-#' @title pvInd class
 #' @author Youness Ergaibi & Ismaïl Ahmed
 #' @exportClass pvInd
 #' @aliases names,pvInd-method shows,pvInd-method getDrug,pvInd-method getAe,pvInd-method getDrugMargin,pvInd-method getAeMargin,pvInd-method getCov,pvInd-method $,pvInd-method $<-,pvInd-method getDrug getAe getDrugMargin getAeMargin getCov naRm naRm,pvInd-method
