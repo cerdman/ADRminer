@@ -1,3 +1,4 @@
+data(sr1)
 data(covSr1)
 head(covSr1)
 covSr1 <- data.frame(covSr1, sexFactor=factor(covSr1$sex, exclude = NULL))  ## exclude=NULL allows to consider NA values as a factor level
@@ -13,5 +14,6 @@ pvIndSr1
 
 pvIndNaRm <- naRm(pvIndSr1)
 
-pvIndSr1Red <- pvIndResize(pvIndSr1, aeMarginMin = 100, drugMarginMin = 50)
-pvIndSr1Red
+pvIndSr1Red <- pvIndResize(pvIndNaRm, aeMarginMin = 100, drugMarginMin = 50)
+
+pvPen2(pvIndSr1Red, aeId = 1, parallel=F)

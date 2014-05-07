@@ -26,5 +26,6 @@ Collate:
     'pvInd.R'
     'pvIndResize.R'
     'pvPen.R'
+    'pvPen2.R'
     'sr-data.R'
     'zzz.R'
