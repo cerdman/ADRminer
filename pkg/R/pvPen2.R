@@ -131,7 +131,7 @@ pvPen2.pvInd <- function(object, aeId = "all", covId = NULL,  posConst = TRUE, n
           }else{
             #print(dim(xGlm))
             #res[[j]] <- glmnet(xGlm, y, family="binomial", standardize = F, lambda=0.00000001) ## positive constraint
-            res[[j]] <- logitreg(x=xGlm, y=y, intercept=T, posConst=posConst)
+            res[[j]] <- .logitreg(x=xGlm, y=y, intercept=T, posConst=posConst)
           }
           #print(res[[j]])
         } 
@@ -154,7 +154,7 @@ pvPen2.pvInd <- function(object, aeId = "all", covId = NULL,  posConst = TRUE, n
         #if(!is.null(covId)){
         #  res <- mclapply(xGlm, .glmPar, y = y, cov = object@cov[, covId], mc.cores = nCores)
         #}else{
-        res <- mclapply(xGlm, logitreg, y = y, mc.cores = nCores)
+        res <- mclapply(xGlm, .logitreg, y = y, mc.cores = nCores)
         #}
       } ## end if PARALLEL
       #print(res)
@@ -247,7 +247,7 @@ pvPen2.pvInd <- function(object, aeId = "all", covId = NULL,  posConst = TRUE, n
 # }
 
 
-logitreg <- function(x, y, intercept = T, start = NULL, posConst = TRUE, ...)
+.logitreg <- function(x, y, intercept = T, start = NULL, posConst = TRUE, ...)
 {  
   fmin <- function(b, X, y) {
     p <- plogis(as.numeric(X %*% b))

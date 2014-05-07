@@ -16,4 +16,9 @@ pvIndNaRm <- naRm(pvIndSr1)
 
 pvIndSr1Red <- pvIndResize(pvIndNaRm, aeMarginMin = 100, drugMarginMin = 50)
 
-pvPen2(pvIndSr1Red, aeId = 1, parallel=F)
+require(rbenchmark)
+benchmark(pvPen2(pvIndSr1Red, aeId = 1:10, parallel=T, nDrugMax = 40), pvPen(pvIndSr1Red, aeId = 1:10, parallel=T, nDrugMax = 40), replications = 5)
+
+library(lineprof)
+prof <- lineprof(pvPen2(pvIndSr1Red, aeId = 1:10, parallel=F
+shine(prof)
