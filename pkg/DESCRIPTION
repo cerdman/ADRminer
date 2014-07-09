@@ -18,6 +18,7 @@ Suggests:
     parallel,
 Collate:
     'ADRminer.R'
+    'ADRminerServer.R'
     'gps.R'
     'nADR.R'
     'pvCont-class.R'
@@ -27,5 +28,6 @@ Collate:
     'pvIndResize.R'
     'pvPen.R'
     'pvPen2.R'
+    'readFAERS.R'
     'sr-data.R'
     'zzz.R'

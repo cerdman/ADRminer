@@ -40,7 +40,7 @@
 gps <- function (object, ...) UseMethod("gps")
 
 # gps pvCont --------------------------------------------------------------
-#' @S3method gps pvCont
+#' @export gps pvCont
 gps.pvCont <- function(object, rr0=1, assocMeasure=c("postH0","lb05","postE"), detectCriter=c("FDR","nSig","assocMeasure"), criterThres = 0.05, nMin=1, truncThres = 0, hyperparamInit = c(alpha1= 0.2, beta1= 0.06, alpha2=1.4, beta2=1.8, w=0.1), hyperparam = NULL, allRes=F, ...){
   
   if(!inherits(object, "pvCont")) stop("x must be a pvCont object.")
@@ -165,7 +165,7 @@ gps.pvCont <- function(object, rr0=1, assocMeasure=c("postH0","lb05","postE"), d
 }
 
 # gps pvInd ---------------------------------------------------------------
-#' @S3method gps pvInd
+#' @export gps pvInd
 gps.pvInd <- function(object, rr0=1, assocMeasure=c("postH0","lb05","postE"), detectCriter=c("FDR","nSig","assocMeasure"), criterThres = 0.05, strat=NULL, nMin=1, truncThres = 0, hyperparamInit = c(alpha1= 0.2, beta1= 0.06, alpha2=1.4, beta2=1.8, w=0.1), hyperparam = NULL, allRes=F, ...){
   if(!inherits(object, "pvInd")) stop("x must be a pvInd object.")
   assocMeasure <- match.arg(assocMeasure) #keep only the first argument
