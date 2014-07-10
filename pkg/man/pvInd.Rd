@@ -2,15 +2,35 @@
 \docType{methods}
 \encoding{UTF-8}
 \name{pvInd}
+\alias{#'}
 \alias{pvInd}
-\alias{pvInd,data.frame,data.frame-method}
-\alias{pvInd,data.frame,missing-method}
+\alias{pvInd,data.frame,data.frame,missing,data.frame-method}
+\alias{pvInd,data.frame,data.frame,missing,missing-method}
+\alias{pvInd,missing,missing,data.frame,data.frame-method}
+\alias{pvInd,missing,missing,data.frame,missing-method}
 \title{pvInd}
 \usage{
-pvInd(adr, cov, ...)
+pvInd(drug, ae, adr, cov, ...)
 }
 \arguments{
-\item{adr}{a data.frame with three columns:}
+\item{adr}{a data.frame with three columns:
+\itemize{
+\item spontaneous report identifier
+\item drug label
+\item adverse event label
+}}
+
+\item{drug}{data.frame or matrix with two columns
+\itemize{
+\item spontaneous report identifier
+\item drug label
+}}
+
+\item{ae}{data.frame or matrix with two columns
+\itemize{
+\item spontaneous report identifier
+\item adverse event label
+}}
 
 \item{cov}{data.frame which contains individual covariates that can be used for stratified analysis. It is assumed that the first column of the data.frame corresponds to the spontaneous report identifier.}
 

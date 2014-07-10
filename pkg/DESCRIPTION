@@ -14,11 +14,11 @@ Depends:
     LBE,
     Matrix,
     glmnet,
+    data.table
 Suggests:
     parallel,
 Collate:
     'ADRminer.R'
-    'ADRminerServer.R'
     'gps.R'
     'nADR.R'
     'pvCont-class.R'

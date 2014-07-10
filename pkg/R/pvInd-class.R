@@ -28,10 +28,17 @@
 
 # pvInd Class definition --------------------------------------------------
 setClass(
-  "pvInd",
-  representation(drug="dgCMatrix", ae="dgCMatrix", drugMargin="numeric", aeMargin="numeric", cov="data.frame"),
-  prototype(drug=sparseMatrix(1,1,x=0), ae=sparseMatrix(1,1,x=0), drugMargin=numeric(), aeMargin=numeric(), cov=data.frame())
+  "pvInd", 
+  representation(
+    drug="Matrix", 
+    ae="Matrix", 
+    drugMargin="numeric", 
+    aeMargin="numeric", 
+    cov="data.frame"
+  ),
+  prototype(drug=Matrix(0, sparse = T), ae=Matrix(0, sparse = T), drugMargin=numeric(), aeMargin=numeric(), cov=data.frame())
 )
+
 
 .validPvInd <- function(object){
   if (nrow(object@drug) != nrow(object@ae)){
@@ -77,7 +84,7 @@ setMethod(
     return(x)
   }
 ) # end naRm method for pvInd
-  
+
 
 
 # show --------------------------------------------------------------------
@@ -87,13 +94,13 @@ setMethod(
   function (object){
     cat("S4 class:", as.character(class(object)), "\n")    
     cat("\n@drug: ", nrow(object@drug), "x", ncol(object@drug), ", Drug sparse matrix:\n" )
-    print(as.matrix(head(object@drug[,1:6])))        
+#    show(object@drug)        
     cat("@ae: ", nrow(object@ae), "x", ncol(object@ae), ", AE sparse matrix:\n" )
-    print(as.matrix(head(object@ae[,1:6])))  
+#    show(object@ae)  
     #cat("@drugMargin: (length=", length(object@drugMargin), ")", head(object@drugMargin), "\n" , sep="")   
     #cat("@aeMargin: (length=", length(object@aeMargin), ")", head(object@aeMargin), "\n" , sep="")          
     cat("@cov: Covariate data.frame:", nrow(object@cov), "x", ncol(object@cov), "\n" )
-    print(head(object@cov))
+#    print(head(object@cov))
   }
 )# end show method for pvInd
 
@@ -145,7 +152,7 @@ setMethod("getCov","pvInd", function(x,...){
 # ## $
 
 setMethod("$","pvInd",function(x, name) {
-return(slot(x,name))
+  return(slot(x,name))
 })
 # 
 
