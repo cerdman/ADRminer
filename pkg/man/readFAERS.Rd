@@ -14,9 +14,15 @@ readFAERS(drugFile, reacFile, demoFile, ROLE_COD = c("PS", "SS"),
 
 \item{demoFile}{path to the DEMO***.txt ASCII file}
 
-\item{ROLE_COD}{a character vector corresponding to the drug's reported role in event. Only reports for drug}
+\item{ROLE_COD}{a character vector corresponding to the drug's reported role in event. Only reports for drug with the reported role are kept in the pvInd object.
+\itemize{
+\item PS: Primary Suspect Drug
+\item SS: Secondary Suspect Drug
+\item C: Concomitant
+\item I: Interacting
+}}
 
-\item{OCCP_COD}{a character vector corresponding to abbreviation for the reporter's type of occupation
+\item{OCCP_COD}{a character vector corresponding to abbreviation for the reporter's type of occupation. Only reports for drug with the reported role are kept in the pvInd object.
 \itemize{
 \item MD: Physician
 \item PH: Pharmacist
@@ -31,7 +37,7 @@ The default value is set to c("MD","OT", "PH").}
 \item{drugMarginMin}{Minimum number of reports in which a drug must be involved in order to be kept}
 }
 \description{
-\code{readFAERS} makes it possible to import and convert data from the AERS into a pvInd object. Data are available on the website of the FDA. At present, we only consider initial report (I_F_COD==I). We also keep only data for which drugs do not correspond to a valid trade name (VAL_VBM==1)
+\code{readFAERS} makes it possible to import and convert data from the AERS into a pvInd object. Data are available on the website of the FDA. At present, we only consider initial report (I_F_COD==I). We also keep only data for which drugs do not correspond to a valid trade name (VAL_VBM==1). For more details, please refer to the documentation provided with the FAERS files (ASC_NTS.Doc)
 }
 \author{
 Ismaïl Ahmed

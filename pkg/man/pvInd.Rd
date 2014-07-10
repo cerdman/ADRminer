@@ -2,7 +2,6 @@
 \docType{methods}
 \encoding{UTF-8}
 \name{pvInd}
-\alias{#'}
 \alias{pvInd}
 \alias{pvInd,data.frame,data.frame,missing,data.frame-method}
 \alias{pvInd,data.frame,data.frame,missing,missing-method}

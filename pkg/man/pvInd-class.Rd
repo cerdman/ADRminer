@@ -18,7 +18,7 @@
 \alias{naRm,pvInd-method}
 \alias{names,pvInd-method}
 \alias{pvInd-class}
-\alias{shows,pvInd-method}
+\alias{show,pvInd-method}
 \title{Formal class "pvInd"}
 \description{
 The class pvInd is a class (S4) for storing individual spontaneous report data.

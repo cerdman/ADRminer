@@ -1,4 +1,5 @@
 #' @encoding UTF-8
+#' @title Formal class "pvCont"
 #' @name pvCont-class
 #' @aliases show,pvCont-method names,pvCont-method
 #' @docType class

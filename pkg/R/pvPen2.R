@@ -110,8 +110,8 @@ pvPen2.pvInd <- function(object, aeId = "all", covId = NULL,  posConst = TRUE, n
       res <- vector("list", length = nGlm)
       dev[[i]] <- vector("numeric", length = nGlm)
       bic[[i]] <- vector("numeric", length = nGlm)
-      aic[[i]] <- vector("numeric", length = nGlm)
-      ebic[[i]] <- vector("numeric", length = nGlm)
+      #aic[[i]] <- vector("numeric", length = nGlm)
+      #ebic[[i]] <- vector("numeric", length = nGlm)
       nParam[[i]] <- vector("numeric", length = nGlm)
       
       if (parallel == FALSE){

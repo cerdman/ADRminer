@@ -39,8 +39,6 @@
 #' pvInd,missing,missing,data.frame,missing-method
 #' pvInd,missing,missing,data.frame,data.frame-method
 #' 
-#' #' @aliases pvCont,pvInd,character-method pvCont,pvInd,missing-method pvCont,data.frame,missing-method pvCont,matrix,missing-method
-#' 
 # @param drugMarginLim Minimum number of spontaneous reports for a drug to be included (default is 1)
 # @param aeMarginLim Minimum number of spontaneous reports for an adverse event to be included (default is 1) 
 
@@ -77,6 +75,8 @@ setMethod(
     sD <- sparseMatrix(idxR, idxC, x=1)
     idx <- which(sD>1, arr.ind = T)
     sD[idx] <- 1
+    #print(class(sD))
+    #print(inherits(sD, "Matrix"))
     rownames(sD) <- rownD
     colnames(sD) <- colnD
     

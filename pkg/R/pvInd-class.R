@@ -6,7 +6,22 @@
 #' @docType class
 #' @author Youness Ergaibi & Ismaïl Ahmed
 #' @exportClass pvInd
-#' @aliases names,pvInd-method shows,pvInd-method getDrug,pvInd-method getAe,pvInd-method getDrugMargin,pvInd-method getAeMargin,pvInd-method getCov,pvInd-method $,pvInd-method $<-,pvInd-method getDrug getAe getDrugMargin getAeMargin getCov naRm naRm,pvInd-method
+#' @aliases names,pvInd-method 
+#' show,pvInd-method
+#' getDrug,pvInd-method 
+#' getAe,pvInd-method 
+#' getDrugMargin,pvInd-method 
+#' getAeMargin,pvInd-method 
+#' getCov,pvInd-method 
+#' $,pvInd-method 
+#' $<-,pvInd-method 
+#' naRm 
+#' naRm,pvInd-method
+#' getDrug
+#' getAe
+#' getDrugMargin
+#' getAeMargin
+#' getCov 
 #' @slot drug Drug matrix in sparse format \code{Matrix}.
 #' @slot ae Adverse Event matrix in sparse format \code{Matrix}.
 #' @slot drugMargin Vector of the marginal counts for each drug.

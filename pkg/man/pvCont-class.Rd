@@ -5,9 +5,9 @@
 \alias{names,pvCont-method}
 \alias{pvCont-class}
 \alias{show,pvCont-method}
-\title{pvCont class}
+\title{Formal class "pvCont"}
 \description{
-pvCont class
+Formal class "pvCont"
 }
 \author{
 Youness Ergaibi & Ismaïl Ahmed
