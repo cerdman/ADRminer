@@ -1,6 +1,6 @@
 #' @encoding UTF-8
 #' @title read data from FAERS
-#' @description \code{readFAERS} makes it possible to import and convert data from the AERS into a pvInd object. Data are available on the website of the FDA. At present, we only consider initial report (I_F_COD==I). We also keep only data for which drugs do not correspond to a valid trade name (VAL_VBM==1). For more details, please refer to the documentation provided with the FAERS files (ASC_NTS.Doc)
+#' @description \code{readFAERS} makes it possible to import and convert data from the AERS into a pvInd object. Data are available on the website of the FDA. At present, we only consider initial report (I_F_COD==I). We also keep only data for which drugs do not correspond to a valid trade name (VAL_VBM==1). For more details, please refer to the documentation provided with the FAERS files (ASC_NTS.Doc). First, we try to read the data with the \code{fread} function of the \code{data.table} package. If the latter doesn't work, the data are read with the \code{read.table} function. At present, the cleaning process for the age covariate is a bit drastic: all value < 0 are considered as NA, value associated with missing AGE_COD are considered as NA and ages entered in second are also considered as missing. Then the age value is converted into year.
 #' @param drugFile path to the DRUG***.txt ASCII file 
 #' @param reacFile path to the REAC***.txt ASCII file
 #' @param demoFile path to the DEMO***.txt ASCII file
@@ -21,18 +21,27 @@
 #' }
 #' The default value is set to c("MD","OT", "PH"). 
 # @param id identifier to be used in the ASCII files
-#' @param aeMarginMin Minimum number of reports in which an ae must be involved in order to be kept
-#' @param drugMarginMin Minimum number of reports in which a drug must be involved in order to be kept
+# @param aeMarginMin Minimum number of reports in which an ae must be involved in order to be kept
+# @param drugMarginMin Minimum number of reports in which a drug must be involved in order to be kept
 #' @author Ismaïl Ahmed
 #' @export
 #' 
 
 readFAERS <-function(drugFile, reacFile, demoFile, ROLE_COD=c("PS", "SS"), 
-                     OCCP_COD=c("MD","OT", "PH"), aeMarginMin = 5, drugMarginMin = 5){
-  drug <- as.data.frame(fread(drugFile, sep="$", header=T, colClasses = "character"))
-  reac <- as.data.frame(fread(reacFile, sep="$", header=T, colClasses = "character"))
-  demo <- as.data.frame(fread(demoFile, sep="$", header=T, colClasses = "character"))
+                     OCCP_COD=c("MD","OT", "PH")){ #, aeMarginMin = 5, drugMarginMin = 5){
+  drug <- try(as.data.frame(fread(drugFile, sep="$", header=T, colClasses = "character")))
+  if (class(drug) == "try-error")
+    drug <- read.table(drugFile, sep="$", quote="", comment.char = "", header=T, colClasses = "character")
+  reac <- try(as.data.frame(fread(reacFile, sep="$", header=T, colClasses = "character")))
+  if (class(reac) == "try-error")
+    reac <- read.table(reacFile, sep="$", quote="", comment.char = "", header=T, colClasses = "character")
+  demo <- try(as.data.frame(fread(demoFile, sep="$", header=T, colClasses = "character")))
+  if (class(demo) == "try-error")
+    demo <- read.table(demoFile, sep="$", quote="", comment.char = "", header=T, colClasses = "character", )
   
+  #print(head(drug))
+  #print(head(reac))
+  #print(head(demo))
   i_f_code <- demo$i_f_code
   demo <- demo[, c("primaryid", "age", "age_cod", "gndr_cod", "reporter_country", "occp_cod")] 
   #print(dim(demo))
@@ -52,19 +61,31 @@ readFAERS <-function(drugFile, reacFile, demoFile, ROLE_COD=c("PS", "SS"),
   #print(dim(drug))
   drug <- drug[, c("primaryid", "drugname")]
   reac <- reac[, c("primaryid", "pt")]
-  #print(dim(reac))
-  reac <- reac[reac$primaryid %in% demo$primaryid, ]
+  
+  
   #print(dim(reac))
   
+  reac <- reac[reac$primaryid %in% demo$primaryid, ]
+  reac <- reac[reac$primaryid %in% drug$primaryid, ]
+  drug <- drug[drug$primaryid %in% reac$primaryid, ]
+  demo <- demo[demo$primaryid %in% drug$primaryid, ]
+  #print(dim(reac))
+  
+  demo$age[demo$age==""] <- NA
+  #demo$age_cod[demo$age_cod ==""] <- NA
+  demo$age[demo$age_cod==""] <- NA
+  demo$age[demo$age_cod=="SEC"] <- NA
   demo$age <- as.numeric(demo$age)
-  demo$age[demo$age_cod == "DEC"] <- demo$age * 10
-  demo$age[demo$age_cod == "DY"] <- demo$age / 365  
-  demo$age[demo$age_cod == "HR"] <- demo$age / (365 *24)
-  demo$age[demo$age_cod == "MON"] <- demo$age / 12
-  demo$age[demo$age_cod == "WK"] <- demo$age / 52
+  demo$age[demo$age < 0] <- NA
+  demo$age[demo$age_cod == "DEC"] <- demo$age[demo$age_cod == "DEC"] * 10
+  demo$age[demo$age_cod == "DY"] <- demo$age[demo$age_cod == "DY"] / 365  
+  demo$age[demo$age_cod == "HR"] <- demo$age[demo$age_cod == "HR"] / (365 *24)
+  demo$age[demo$age_cod == "MON"] <- demo$age[demo$age_cod == "MON"] / 12
+  demo$age[demo$age_cod == "WK"] <- demo$age[demo$age_cod == "WK"] / 52
+  demo <- demo[, -3] ## remove age_cod
   
   res <- pvInd(drug = drug, ae = reac, cov = demo)
-  if ((aeMarginMin > 1) || (drugMarginMin > 1)) 
-      res <- pvIndResize(res, aeMarginMin = aeMarginMin, drugMarginMin = drugMarginMin)
+  #if ((aeMarginMin > 1) || (drugMarginMin > 1)) 
+  #    res <- pvIndResize(res, aeMarginMin = aeMarginMin, drugMarginMin = drugMarginMin)
   res
 }

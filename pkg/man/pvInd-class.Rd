@@ -18,6 +18,8 @@
 \alias{naRm,pvInd-method}
 \alias{names,pvInd-method}
 \alias{pvInd-class}
+\alias{rbind}
+\alias{rbind.pvInd}
 \alias{show,pvInd-method}
 \title{Formal class "pvInd"}
 \description{
@@ -49,6 +51,7 @@ The class pvInd is a class (S4) for storing individual spontaneous report data.
  \item{getAeMargin}{\code{signature(x = "pvInd")}: returns the adverse event margin counts.}
  \item{getCov}{\code{signature(x = "pvInd")}: returns the covariate data.frame.}
  \item{naRm}{\code{signature(x = "pvInd")}: remove spontaneous reports with NA values in the covariate slot.}
+ \item{\code{rbind(...)}}{Take a sequence of pvInd objects and combine by rows. Be careful as the function assumes that the covariates are the same for all pvInd objects. Also the function does not work if the ae slots or drug slots contain empty rows ; empty rows can result from the use of the \code{pvIndResize} function }
 }
 }
 \author{

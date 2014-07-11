@@ -75,8 +75,6 @@ setMethod(
     sD <- sparseMatrix(idxR, idxC, x=1)
     idx <- which(sD>1, arr.ind = T)
     sD[idx] <- 1
-    #print(class(sD))
-    #print(inherits(sD, "Matrix"))
     rownames(sD) <- rownD
     colnames(sD) <- colnD
     
@@ -90,7 +88,6 @@ setMethod(
     sAe[sAe>1] <- 1
     rownames(sAe) <- rownAe
     colnames(sAe) <- colnAe
-    
     idx <- match(rownD, rownAe)
     if(sum(is.na(idx))) warning("Some observations are missing or mismatch between the drug and ae datasets")
     sD <- sD[!is.na(idx), ]
@@ -116,8 +113,8 @@ setMethod(
       idx <- match(row.names(pvInd@ae), as.character(cov[,1]))
       if(sum(is.na(idx))) warning("Some observations are missing or mismatch between adr and covariates datasets")
       covSort <- cov[idx,]
-      row.names(covSort) <- covSort[,1]
-      covSort <- covSort[,-1]      
+      #row.names(covSort) <- covSort[,1]
+      #covSort <- covSort[,-1]      
     }else{
       covSort <- data.frame()
     }
@@ -185,8 +182,8 @@ setMethod(
       idx <- match(row.names(pvInd@ae), as.character(cov[,1]))
       if(sum(is.na(idx))) warning("Some observations are missing or mismatch between adr and covariates datasets")
       covSort <- cov[idx,]
-      row.names(covSort) <- covSort[,1]
-      covSort <- covSort[,-1]      
+      #row.names(covSort) <- covSort[,1]
+      #covSort <- covSort[,-1]      
     }else{
       covSort <- data.frame()
     }

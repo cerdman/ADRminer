@@ -5,7 +5,7 @@
 \title{read data from FAERS}
 \usage{
 readFAERS(drugFile, reacFile, demoFile, ROLE_COD = c("PS", "SS"),
-  OCCP_COD = c("MD", "OT", "PH"), aeMarginMin = 5, drugMarginMin = 5)
+  OCCP_COD = c("MD", "OT", "PH"))
 }
 \arguments{
 \item{drugFile}{path to the DRUG***.txt ASCII file}
@@ -31,13 +31,9 @@ readFAERS(drugFile, reacFile, demoFile, ROLE_COD = c("PS", "SS"),
 \item CN: Consumer
 }
 The default value is set to c("MD","OT", "PH").}
-
-\item{aeMarginMin}{Minimum number of reports in which an ae must be involved in order to be kept}
-
-\item{drugMarginMin}{Minimum number of reports in which a drug must be involved in order to be kept}
 }
 \description{
-\code{readFAERS} makes it possible to import and convert data from the AERS into a pvInd object. Data are available on the website of the FDA. At present, we only consider initial report (I_F_COD==I). We also keep only data for which drugs do not correspond to a valid trade name (VAL_VBM==1). For more details, please refer to the documentation provided with the FAERS files (ASC_NTS.Doc)
+\code{readFAERS} makes it possible to import and convert data from the AERS into a pvInd object. Data are available on the website of the FDA. At present, we only consider initial report (I_F_COD==I). We also keep only data for which drugs do not correspond to a valid trade name (VAL_VBM==1). For more details, please refer to the documentation provided with the FAERS files (ASC_NTS.Doc). First, we try to read the data with the \code{fread} function of the \code{data.table} package. If the latter doesn't work, the data are read with the \code{read.table} function. At present, the cleaning process for the age covariate is a bit drastic: all value < 0 are considered as NA, value associated with missing AGE_COD are considered as NA and ages entered in second are also considered as missing. Then the age value is converted into year.
 }
 \author{
 Ismaïl Ahmed

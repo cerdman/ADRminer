@@ -33,7 +33,7 @@ pvPen.pvInd <- function(object, aeId = "all", covId = NULL,  posConst = TRUE, nD
   
   if(parallel && !require(parallel)) stop("parallel package requested but not installed")
   if(parallel && is.null(nCores)) nCores <- parallel::detectCores()
-  if (!inherits(object, "pvInd")) stop("object must be of class PvInd")
+  if (!inherits(object, "pvInd")) stop("object must be of class pvInd")
   
   #criter <- match.arg(criter)
   lower.limit <- ifelse(posConst, 0, -Inf)

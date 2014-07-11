@@ -45,6 +45,7 @@ pvIndResize <- function(pvIndObj, drugId=NULL, aeId=NULL, aeMarginMin=1, drugMar
     idxAe <- which(pvInd@aeMargin < aeMarginMin)
     if (length(idxAe)>0){
       pvInd@ae <- pvInd@ae[,-idxAe]
+      #pvInd@ae <- pvInd@ae[rowSums(pvInd@ae)>0, ]
       pvInd@aeMargin <- pvInd@aeMargin[-idxAe]
     }
   }
@@ -52,6 +53,7 @@ pvIndResize <- function(pvIndObj, drugId=NULL, aeId=NULL, aeMarginMin=1, drugMar
     idxD <- which(pvInd@drugMargin < drugMarginMin)
     if (length(idxD)>0){
       pvInd@drug <- pvInd@drug[,-idxD]
+      #pvInd@drug <- pvInd@drug[rowSums(pvInd@drug)>0, ]
       pvInd@drugMargin <- pvInd@drugMargin[-idxD]
     }
   }
