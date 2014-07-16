@@ -40,8 +40,8 @@
 gps <- function (object, ...) UseMethod("gps")
 
 # gps pvCont --------------------------------------------------------------
-#' @export gps pvCont
-gps.pvCont <- function(object, rr0=1, assocMeasure=c("postH0","lb05","postE"), detectCriter=c("FDR","nSig","assocMeasure"), criterThres = 0.05, nMin=1, truncThres = 0, hyperparamInit = c(alpha1= 0.2, beta1= 0.06, alpha2=1.4, beta2=1.8, w=0.1), hyperparam = NULL, allRes=F, ...){
+#' @export 
+gps.pvCont <- function(object, rr0 = 1, assocMeasure = c("postH0","lb05","postE"), detectCriter = c("FDR","nSig","assocMeasure"), criterThres = 0.05, nMin=1, truncThres = 0, hyperparamInit = c(alpha1 = 0.2, beta1 = 0.06, alpha2 = 1.4, beta2 = 1.8, w = 0.1), hyperparam = NULL, allRes = F, ...){
   
   if(!inherits(object, "pvCont")) stop("x must be a pvCont object.")
   assocMeasure <- match.arg(assocMeasure) # keep only the first argument
@@ -100,7 +100,8 @@ gps.pvCont <- function(object, rr0=1, assocMeasure=c("postH0","lb05","postE"), d
       pOut  <- suppressWarnings(nlm(lik, p=hyperparamInit, n=nc, expN=expNc, iterlim=1000))
     }else{
       pOut  <- suppressWarnings(nlm(likTrunc, p=hyperparamInit, n=n[n>truncThres], expN=expN[n>truncThres], trunc=truncThres, iterlim=1000))
-    }      
+    }
+    #print(pOut)
     hp <- pOut$estimate
     convergence <- pOut$code
   }
@@ -165,7 +166,7 @@ gps.pvCont <- function(object, rr0=1, assocMeasure=c("postH0","lb05","postE"), d
 }
 
 # gps pvInd ---------------------------------------------------------------
-#' @export gps pvInd
+#' @export
 gps.pvInd <- function(object, rr0=1, assocMeasure=c("postH0","lb05","postE"), detectCriter=c("FDR","nSig","assocMeasure"), criterThres = 0.05, strat=NULL, nMin=1, truncThres = 0, hyperparamInit = c(alpha1= 0.2, beta1= 0.06, alpha2=1.4, beta2=1.8, w=0.1), hyperparam = NULL, allRes=F, ...){
   if(!inherits(object, "pvInd")) stop("x must be a pvInd object.")
   assocMeasure <- match.arg(assocMeasure) #keep only the first argument
@@ -173,7 +174,7 @@ gps.pvInd <- function(object, rr0=1, assocMeasure=c("postH0","lb05","postE"), de
   objectPvCont <- pvCont(object)
   if (!is.null(strat)) {
     temp <- pvCont(object, strat)
-    print(head(temp@expN))
+    #print(head(temp@expN))
     expN <-apply(temp@expN, 1, sum)
     objectPvCont@expN <- matrix(expN, ncol=1)
   }  

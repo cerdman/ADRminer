@@ -20,6 +20,7 @@
 nADR <- function (object, drugId, aeId, ...) UseMethod("nADR")
 
 # nADR pvInd----------------------------------------------------------------
+#' @export
 nADR.pvInd <- function(object, drugId, aeId, ...){
   if (!is.character(drugId)) stop("drugId must be a character")
   if (length(drugId)>1) stop("For now, nADR only handle one drug at a time")
@@ -36,7 +37,7 @@ nADR.pvInd <- function(object, drugId, aeId, ...){
 }
   
 # nADR pvCont----------------------------------------------------------------
-
+#' @export
 nADR.pvCont <- function(object, drugId, aeId, ...){
   if (!is.character(drugId)) stop("drugId must be a character")
   if (length(drugId)>1) stop("For now, nADR only handle one drug at a time")

@@ -84,8 +84,9 @@ setMethod(
     idxR <- as.numeric(ae[,1])
     idxC <- as.numeric(ae[,2])
     sAe <- sparseMatrix(idxR,idxC,x=1)
-    idx <- which(sAe>1, arr.ind = T)    
-    sAe[sAe>1] <- 1
+    idx <- which(sAe>1, arr.ind = T)   
+    
+    sAe[idx] <- 1
     rownames(sAe) <- rownAe
     colnames(sAe) <- colnAe
     idx <- match(rownD, rownAe)
@@ -107,7 +108,6 @@ setMethod(
   f="pvInd",
   signature = c(drug = "data.frame", ae = "data.frame", cov = "data.frame", adr = "missing"),
   definition = function(drug, ae, cov){
-    
     pvInd <- pvInd(drug, ae)
     if (ncol(cov)>0){
       idx <- match(row.names(pvInd@ae), as.character(cov[,1]))
@@ -144,7 +144,8 @@ setMethod(
     idxR <- as.numeric(adr[,1])
     idxC <- as.numeric(adr[,2])
     sD <- sparseMatrix(idxR,idxC,x=1)
-    sD[sD>1] <- 1
+    idx <- which(sD>1, arr.ind = T)
+    sD[idx] <- 1    
     rownames(sD) <- rownD
     colnames(sD) <- colnD
     
@@ -152,7 +153,8 @@ setMethod(
     colnAe <- levels(adr[,3])
     idxC <- as.numeric(adr[,3])
     sAe <- sparseMatrix(idxR,idxC,x=1)
-    sAe[sAe>1] <- 1
+    idx <- which(sAe>1, arr.ind = T)
+    sAe[idx] <- 1
     rownames(sAe) <- rownD
     colnames(sAe) <- colnAe
     

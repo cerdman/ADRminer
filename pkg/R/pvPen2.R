@@ -58,6 +58,7 @@ pvPen2.pvInd <- function(object, aeId = "all", covId = NULL,  posConst = TRUE, n
     for (i in 1:length(covId)){  
       if (is.factor(object@cov[[covId[i]]])) {
         temp <- model.matrix(~object@cov[[covId[i]]]-1)
+        
         colnames(temp) <- paste(covId[i], "_", levels(object@cov[[covId[i]]]), sep = "")
         covGlmnet <- cbind(covGlmnet, temp[,-1, drop=F])
       } else  {
@@ -185,7 +186,7 @@ pvPen2.pvInd <- function(object, aeId = "all", covId = NULL,  posConst = TRUE, n
       #idxMinEBIC <- which.min(ebic[[i]])
       if (idxMinBIC == nGlm) warning("The best BIC is obtained with about nDrugMax variables.")
       #if (idxMinAIC == nGlm) warning("The best AIC is obtained with about nDrugMax variables.")
-      resGlmBIC[[i]] <- res[[idxMinBIC]]
+      resGlmBIC[[i]] <- matrix(res[[idxMinBIC]], ncol = 1)
       #resGlmEBIC[[i]] <- res[[idxMinEBIC]]
       #resGlmAIC[[i]] <- res[[idxMinAIC]]
       

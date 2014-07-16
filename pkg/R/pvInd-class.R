@@ -74,7 +74,7 @@ setValidity("pvInd", .validPvInd)
 setMethod("names", signature(x = "pvInd"), function(x) return(slotNames(x)))# end names method for pvInd
 
 
-# na.omit -----------------------------------------------------------------
+# naRm -----------------------------------------------------------------
 #' @export
 setGeneric("naRm", function(x, ...) standardGeneric("naRm"))
 
@@ -104,14 +104,15 @@ setMethod(
   "show",
   "pvInd",
   function (object){
-    cat("S4 class:", as.character(class(object)), "\n")    
-    cat("\n@drug: ", nrow(object@drug), "x", ncol(object@drug), ", Drug sparse matrix:\n" )
+    cat("\n S4 class:", as.character(class(object)), "\n")    
+    cat("@drug: Sparse matrix: " , nrow(object@drug), "x", ncol(object@drug), "\n" )
     #    show(object@drug)        
-    cat("@ae: ", nrow(object@ae), "x", ncol(object@ae), ", AE sparse matrix:\n" )
+    cat("@ae: Sparse matrix", nrow(object@ae), "x", ncol(object@ae), "\n" )
     #    show(object@ae)  
     #cat("@drugMargin: (length=", length(object@drugMargin), ")", head(object@drugMargin), "\n" , sep="")   
     #cat("@aeMargin: (length=", length(object@aeMargin), ")", head(object@aeMargin), "\n" , sep="")          
     cat("@cov: Covariate data.frame:", nrow(object@cov), "x", ncol(object@cov), "\n" )
+    if (ncol(object@cov > 0)) cat(names(object@cov), "\n")
     #    print(head(object@cov))
   }
 )# end show method for pvInd
@@ -183,7 +184,7 @@ rbind.pvInd <- function(...){
   for (x in list(...)) {
     print(x)
     if (!inherits(x, "pvInd")) 
-      stop("all objects listed in the  function arguments must be of pvInd class")     
+      stop("all objects listed in the  function arguments must be of class pvInd")     
   }
   x <- list(...)
   if (length(x) == 1) return(x)

@@ -55,8 +55,16 @@ setMethod(
     idx <- match(strat, c(colnames(object@cov)))
     
     if (sum(is.na(idx)>0)) stop("at least one of the stratification covariates does not exist in the object")
+    for (i in 1: length(strat)){
+      if (!is.factor(object$cov[[strat[i]]])) {
+        warning(strat[i] ," is not defined as factor - Attempt to convert this covariate into a factor", immediate. = TRUE)
+        object$cov[[strat[i]]] <- factor(object$cov[[strat[i]]])
+        if (nlevels(object$cov[[strat[i]]]) >= 10) stop("Too many levels for the factor")  
+      }
+    }
     varStrat <- factor(apply( object@cov[,idx, drop=F], 1, paste, collapse=" "))
     L <- nlevels(varStrat)
+    if (L >= 10) warning("The number of strates is ", L, ". Be careful as it may create numerical and statistical instabilities", immediate. = TRUE)
     print(table(varStrat))
 
     aeSplit <- vector("list", length=nlevels(varStrat))
@@ -80,12 +88,12 @@ setMethod(
       n1._mat <- apply(cont,1,sum) 
       n.1_mat <- apply(cont,2,sum)
       drugMargin[,l] <- n1._mat[coord[,1]] 
-      aeMargin[,l] <- n.1_mat[coord[,2]] # ... et sa marge "colonne"
+      aeMargin[,l] <- n.1_mat[coord[,2]] 
       N[l] <- sum(n11[,l]) 
       expN[,l] <- drugMargin[,l]*aeMargin[,l]/N[l]
     }
     names(N) <- levels(varStrat)
-    new("pvCont", dLab=dLab, aeLab=aeLab, n=n11, drugMargin=drugMargin,  aeMargin= aeMargin, expN=expN, N=N, strat=levels(varStrat))                
+    new("pvCont", drugLab=dLab, aeLab=aeLab, n=n11, drugMargin=drugMargin,  aeMargin= aeMargin, expN=expN, N=N, strat=levels(varStrat))                
   }
 )
 
