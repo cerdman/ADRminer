@@ -7,7 +7,33 @@
 \alias{show,pvCont-method}
 \title{Formal class "pvCont"}
 \description{
-Formal class "pvCont"
+The class pvCont is a class (S4) for storing aggregated spontaneous report data. This class is also called when performing stratified analysis from disproportionality methods such as \code{\link{gps}}
+}
+\section{Slots}{
+
+\describe{
+\item{\code{drugLab}}{Contains the drug label}
+
+\item{\code{aeLab}}{Contains the adverse event label}
+
+\item{\code{n}}{Contains the number of spontaneous reports associated with \code{drugLab} and \code{aeLab}}
+
+\item{\code{drugMargin}}{Marginal counts for each drug.}
+
+\item{\code{aeMargin}}{Marginal counts for each adverse event.}
+
+\item{\code{N}}{sum of \code{n}}
+
+\item{\code{expN}}{expected number (\code{drugMargin aeMargin / N} )}
+
+\item{\code{strat}}{Variable used to build a stratified pvCont object (for internal use).}
+}}
+\section{Methods}{
+
+\describe{
+ \item{names}{\code{signature(x = "pvCont")}: returns the names of the slots of the pvCont object.}
+ \item{show}{\code{signature(x = "pvCont")}: prints a description of the pvCont object.}
+}
 }
 \author{
 Youness Ergaibi & Ismaïl Ahmed

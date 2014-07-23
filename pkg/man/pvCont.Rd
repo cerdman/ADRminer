@@ -7,7 +7,7 @@
 \alias{pvCont,matrix,missing-method}
 \alias{pvCont,pvInd,character-method}
 \alias{pvCont,pvInd,missing-method}
-\title{pvCont}
+\title{pvCont constructor}
 \usage{
 pvCont(object, strat)
 }
@@ -20,7 +20,7 @@ pvCont(object, strat)
 an object of class \code{\link{pvCont}}.
 }
 \description{
-pvCont converts an pvInd object into pvCont object.
+pvCont is to be used to convert raw aggregated spontaneaous reporting data into a pvCont object (\code{pvCont-class}). This constructor can also be used to convert pvInd object into pvCont object.
 }
 \author{
 Ismaïl Ahmed

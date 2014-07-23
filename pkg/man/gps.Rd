@@ -7,9 +7,15 @@
 \alias{gps.pvInd}
 \title{Gamma Poisson Shrinkage}
 \usage{
-\method{gps}{pvCont}(object, rr0=1, assocMeasure=c("postH0","lb05","postE"), detectCriter=c("FDR","nSig","assocMeasure"), criterThres = 0.05, nMin=1, truncThres = 0, hyperparamInit = c(alpha1= 0.2, beta1= 0.06, alpha2=1.4, beta2=1.8, w=0.1), hyperparam = NULL, allRes=F, \dots)
+\method{gps}{pvCont}(object, rr0=1, assocMeasure=c("postH0","lb05","postE"),
+detectCriter=c("FDR","nSig","assocMeasure"), criterThres = 0.05, nMin=1, truncThres = 0,
+hyperparamInit = c(alpha1= 0.2, beta1= 0.06, alpha2=1.4, beta2=1.8, w=0.1),
+hyperparam = NULL, allRes=F, \dots)
 
-\method{gps}{pvInd}(object, rr0=1, assocMeasure=c("postH0","lb05","postE"), detectCriter=c("FDR","nSig","assocMeasure"), criterThres = 0.05, strat=NULL, nMin=1, truncThres = 0, hyperparamInit = c(alpha1= 0.2, beta1= 0.06, alpha2=1.4, beta2=1.8, w=0.1), hyperparam = NULL, allRes=F, \dots)
+\method{gps}{pvInd}(object, rr0=1, assocMeasure=c("postH0","lb05","postE"),
+detectCriter=c("FDR","nSig","assocMeasure"), criterThres = 0.05, strat=NULL,
+nMin=1, truncThres = 0, hyperparamInit = c(alpha1= 0.2, beta1= 0.06, alpha2=1.4, beta2=1.8, w=0.1),
+hyperparam = NULL, allRes=F, \dots)
 }
 \arguments{
 \item{object}{An object of class pvInd or pvCont}
@@ -24,40 +30,49 @@
 }}
 
 \item{detectCriter}{Decision rule for the signal generation based on:
-FDR: (Default value)
-nSig: number of signals
-assocMeasure: ranking statistic. See \code{assocMeasure}}
+\itemize{
+\item FDR: (Default value)
+\item nSig: number of signals
+\item assocMeasure: ranking statistic. See \code{assocMeasure}
+}}
 
 \item{criterThres}{Threshold used for \code{detectCriter}. Ex 0.05 for FDR.}
 
-\item{nMin}{Minimum number of spontaneous reports for a drug-event pair to be potentially considered as a signal. By default, \code{nMin}=1.}
+\item{nMin}{Minimum number of spontaneous reports for a drug-event pair to be potentially considered as a signal. By default, \code{nMin=1}.}
 
-\item{truncThres}{Used for the hyper parameter calculations. The marginal likelihood involves mixtures of two (possibly truncated) negative binomial. Using a value of t for this parameter means that only sr associated with strictly more than t (>t) reports will be used and that the likelihood is a mixture of truncated negative binomial. Default value is set to 0 as the information regarding drug-event pairs not associated with any adr is not used. By setting \code{truncThres} to NULL, the whole contingency table is rebuild and all data (thus including the 0s) are used to estimate the hyperparameters.}
+\item{truncThres}{Used for the hyper parameter calculation. The marginal likelihood involves mixtures of two (possibly truncated) negative binomial. Using a value of t for this parameter means that only spontaneous reports associated with strictly more than t (>t) reports will be used and that the likelihood is a mixture of truncated negative binomial. Default value is set to 0 as the information regarding drug-event pairs not associated with any adr is not used. By setting \code{truncThres} to NULL, the whole contingency table is rebuild and all data (thus including the 0s) are used to estimate the hyperparameters.}
 
 \item{hyperparamInit}{Initialization vector for the prior mixture parameters (alpha1, beta1, alpha2, beta2, w). By default, hyperparamInit = c(alpha1 = 0.2, beta1 = 0.06, alpha2 = 1.4, beta2 = 1.8, w = 0.1), i.e. the prior parameters provided in DuMouchel (1999).}
 
-\item{hyperparam}{Hyper parameter values for the 2 gamma mixture model. By default, hyperparam = NULL which means that the hyperparameters are calculated by maximising the marginal likelihood. This parameter is meant to avoid this maximization step}
+\item{hyperparam}{Hyper parameter values for the 2 gamma mixture model. By default, hyperparam = NULL which means that the hyperparameters are calculated by maximizing the marginal likelihood. This parameter is meant to avoid this maximization step}
 
-\item{strat}{Character vector containing the name of the covariates to be used for a stratified analysis.}
+\item{strat}{Character vector containing the name of the covariates to be used for a stratified analysis. This is only valid when using a pvInd object (cf \code{object})}
 
 \item{allRes}{Logical value indicating whether all drug-event combination results must be provided.}
 
 \item{...}{Further arguments to be passed to other functions (None for the moment)}
 }
 \value{
-allSig Data.frame summarizing the results for all drug-event combinations with at least \code{nMin} spontaneous reports ordered by \code{assocMeasure}. This output is provided if \code{allRes=TRUE}. Operating characteristics are estimated according to Ahmed et al (Stat Med 2009).
+allSig Data.frame summarizing the results for all drug-event combinations with at least \code{nMin} spontaneous reports ordered by \code{assocMeasure}. This output is provided if \code{allRes=TRUE}. FDR estimates are calculated following to Ahmed et al. (Stat Med 2009).
 
 sig Same as \code{allSig} but restricted to the list of generated signals.
 
 nSig Number of generated signals.
 
-call specified argumetnts
+hyperparam Estimated value for the hyper parameters estimated from the mixture of negative binomial
+
+convergence Convergence code from the hyper parameter calculation step. For more details, please refer to the \code{\link{nlm}} documentation. Ideally, \code{convergence} should be 0.
 }
 \description{
-Gamma Poisson Shrinkage model proposed by DuMouchel (1999) extended to the multiple comparison framework.
+Gamma Poisson Shrinkage model proposed by DuMouchel (1999) extended to the multiple comparison framework (Ahmed et al. Stat Med 2009)
 }
 \author{
 Youness Ergaibi & Ismaïl Ahmed
+}
+\references{
+DuMouchel, W. (1999). Bayesian data mining in large frequency tables, with an application to the FDA spontaneous reporting system. American Statistician, 53(3), 177–190
+
+Ahmed, I., Haramburu, F., Fourrier-Réglat, A., Thiessard, F., Kreft-Jais, C., Miremont-Salamé, G., Bégaud, B, Tubert-Bitter, P. (2009). Bayesian pharmacovigilance signal detection methods revisited in a multiple comparison setting. Statistics in Medicine, 28(13), 1774–92.
 }
 \keyword{gps}
 

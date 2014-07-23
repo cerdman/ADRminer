@@ -1,9 +1,9 @@
 #' @encoding UTF-8
 #' @title read data from FAERS
-#' @description \code{readFAERS} makes it possible to import and convert data from the AERS into a pvInd object. Data are available on the website of the FDA. At present, we only consider initial report (I_F_COD==I). We also keep only data for which drugs do not correspond to a valid trade name (VAL_VBM==1). For more details, please refer to the documentation provided with the FAERS files (ASC_NTS.Doc). First, we try to read the data with the \code{fread} function of the \code{data.table} package. If the latter doesn't work, the data are read with the \code{read.table} function. At present, the cleaning process for the age covariate is a bit drastic: all value < 0 are considered as NA, value associated with missing AGE_COD are considered as NA and ages entered in second are also considered as missing. Then the age value is converted into year.
-#' @param drugFile path to the DRUG***.txt ASCII file 
-#' @param reacFile path to the REAC***.txt ASCII file
-#' @param demoFile path to the DEMO***.txt ASCII file
+#' @description \code{readFAERS} makes it possible to import and convert data from the AERS into a pvInd object. Data are available on the website of the FDA. Currently, we only consider initial report (I_F_COD==I). We also remove data for which drugs do not correspond to a valid trade name (VAL_VBM==1). For more details, please refer to the documentation provided with the FAERS files (ASC_NTS.Doc). First, we try to read the data with the \code{fread} function of the \code{data.table} package. If the latter doesn't work, the data are read with the \code{read.table} function. At present, the cleaning process for the age covariate is a bit drastic: all value < 0 are considered as NA, value associated with missing AGE_COD are considered as NA and ages entered in second are also considered as missing. Then the age is converted into year.
+#' @param drugFile path to the DRUG***.txt ASCII file (required)
+#' @param reacFile path to the REAC***.txt ASCII file (required)
+#' @param demoFile path to the DEMO***.txt ASCII file (required)
 #' @param ROLE_COD a character vector corresponding to the drug's reported role in event. Only reports for drug with the reported role are kept in the pvInd object.
 #' \itemize{
 #' \item PS: Primary Suspect Drug
@@ -11,6 +11,7 @@
 #' \item C: Concomitant
 #' \item I: Interacting
 #' }
+#' The default value is to kept only the PS and SS drugs (\code{ROLE_COD=c("PS", "SS")})
 #' @param OCCP_COD a character vector corresponding to abbreviation for the reporter's type of occupation. Only reports for drug with the reported role are kept in the pvInd object.
 #' \itemize{
 #' \item MD: Physician
@@ -19,6 +20,7 @@
 #' \item LW: Lawyer
 #' \item CN: Consumer
 #' }
+#' @return an object of class pvInd
 #' The default value is set to c("MD","OT", "PH"). 
 # @param id identifier to be used in the ASCII files
 # @param aeMarginMin Minimum number of reports in which an ae must be involved in order to be kept

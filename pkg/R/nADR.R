@@ -1,5 +1,5 @@
 #' @encoding UTF-8
-#' @title Number of adverse drug reaction associated with adverse event drug pair
+#' @title Number of adverse drug reaction associated with an adverse event drug pair
 #' @description \code{nADR} allows the user to get the number of spontaneous reports associated with an ae - drug pair. It works on both pvInd and pvCont object.
 #' @name nADR
 #' @param object an object of class pvInd or pvCont

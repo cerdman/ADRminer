@@ -5,7 +5,7 @@
 \alias{nADR}
 \alias{nADR.pvCont}
 \alias{nADR.pvInd}
-\title{Number of adverse drug reaction associated with adverse event drug pair}
+\title{Number of adverse drug reaction associated with an adverse event drug pair}
 \usage{
 \method{nADR}{pvCont}(object, drugId, aeId, \dots)
 \method{nADR}{pvInd}(object, drugId, aeId, \dots)
