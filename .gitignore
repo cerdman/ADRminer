@@ -3,4 +3,4 @@
 .RData
 *.Rproj
 Rproj.user/
-ADRminer_0.65_R_x86_64-pc-linux-gnu.tar.gz
+pkg-old/

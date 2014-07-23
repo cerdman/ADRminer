@@ -1,10 +1,10 @@
 #' @encoding UTF-8
 #' @title pvIndResize
-#' @description \code{pvIndResize} makes it possible to select sets of drugs and/or aes. It also allows to remove drug(s) and/or ae(s) whose margin are less
+#' @description \code{pvIndResize} makes it possible to select sets of drugs and/or adverse events. It also allows to remove drug(s) and/or ae(s) whose margin are less
 #' than a given number.
-#' @param pvIndObj an object of class "pvInd" (see \code{\link{pvInd-class}} and \code{\link{pvInd}})
-#' @param drugId can be a vector of characters containing drug labels to be selected or a vector of column indices or the drug matrice (object$drug)
-#' @param aeId can be a vector of characters containing ae labels to be selected or a vector of column indices or the ae matrice (object$ae)
+#' @param pvIndObj an object of class \code{pvInd} (see \code{\link{pvInd-class}} and \code{\link{pvInd}})
+#' @param drugId can be a vector of characters containing drug labels to be selected or a vector of column indices of the drug matrice (object$drug)
+#' @param aeId can be a vector of characters containing ae labels to be selected or a vector of column indices of the ae matrice (object$ae)
 #' @param aeMarginMin Minimum number of reports in which an ae must be involved in order to be kept
 #' @param drugMarginMin Minimum number of reports in which a drug must be involved in order to be kept
 #' @return an object of class pvInd

@@ -7,39 +7,39 @@
 \alias{pvInd,data.frame,data.frame,missing,missing-method}
 \alias{pvInd,missing,missing,data.frame,data.frame-method}
 \alias{pvInd,missing,missing,data.frame,missing-method}
-\title{pvInd}
+\title{pvInd constructor}
 \usage{
 pvInd(drug, ae, adr, cov, ...)
 }
 \arguments{
-\item{adr}{a data.frame with three columns:
+\item{adr}{A data.frame with three columns:
 \itemize{
 \item spontaneous report identifier
 \item drug label
 \item adverse event label
 }}
 
-\item{drug}{data.frame or matrix with two columns
+\item{drug}{A data.frame or a matrix with two columns
 \itemize{
 \item spontaneous report identifier
 \item drug label
 }}
 
-\item{ae}{data.frame or matrix with two columns
+\item{ae}{A data.frame or a matrix with two columns
 \itemize{
 \item spontaneous report identifier
 \item adverse event label
 }}
 
-\item{cov}{data.frame which contains individual covariates that can be used for stratified analysis. It is assumed that the first column of the data.frame corresponds to the spontaneous report identifier.}
+\item{cov}{A data.frame which contains individual covariates. It is assumed that the first column of the data.frame corresponds to the spontaneous report identifier.}
 
 \item{...}{not of any use}
 }
 \value{
-a pvInd object
+an object of class pvInd
 }
 \description{
-This function (which takes the same name that its corresponding formal class \code{\link{pvInd-class}}) should be used to convert a data.frame containing individual spontaneous reports (and optionnaly supplementary individual information) into an pvInd object.
+This function (which takes the same name as its corresponding formal class \code{\link{pvInd-class}}) is to be used to convert spontaneous reports data to a pvInd object.
 }
 \author{
 Ismaïl Ahmed

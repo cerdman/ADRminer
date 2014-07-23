@@ -1,7 +1,7 @@
 # pvInd ---------------------------------------------------------------
 #' @encoding UTF-8
-#' @title Formal class "pvInd"
-#' @description The class pvInd is a class (S4) for storing individual spontaneous report data. 
+#' @title Formal class "pvInd" and basic associated functions
+#' @description The class pvInd is a class (S4) for storing individual spontaneous report data. A number of basic functions are provided to manipulate and access elements stored in this object
 #' @name pvInd-class
 #' @docType class
 #' @author Youness Ergaibi & Ismaïl Ahmed
@@ -25,17 +25,17 @@
 #' @slot cov \code{data.frame} containing individual covariates.
 #' @section Methods:
 #' \describe{
-#'  \item{names}{\code{signature(x = "pvInd")}: returns the names of the slots of the object.}
-#'  \item{show}{\code{signature(x = "pvInd")}: printing of the object.}
+#'  \item{names}{\code{signature(x = "pvInd")}: returns the names of the slots of the pvInd object.}
+#'  \item{show}{\code{signature(x = "pvInd")}: prints a description of the pvInd object.}
 #'  \item{$}{\code{signature(x = "pvInd")}: similar to the  @@ operator; used to access the content of slots of the object.}
 #'  \item{$<-}{\code{signature(x = "pvInd")}: similar to the @@ operator; used to replace the content of slots of the object.}
-#'  \item{getDrug}{\code{signature(x = "pvInd")}: returns the names of the slots of the object.}
-#'  \item{getAe}{\code{signature(x = "pvInd")}: returns the adverse event matrix.}
-#'  \item{getDrugMargin}{\code{signature(x = "pvInd")}: returns the Drug margin counts.}
-#'  \item{getAeMargin}{\code{signature(x = "pvInd")}: returns the adverse event margin counts.}
-#'  \item{getCov}{\code{signature(x = "pvInd")}: returns the covariate data.frame.}
+#'  \item{getDrug}{\code{signature(x = "pvInd")}: returns the drug matrix. This is equivalent to \code{object$drug}.}
+#'  \item{getAe}{\code{signature(x = "pvInd")}: returns the adverse event matrix. This is equivalent to \code{object$ae}}
+#'  \item{getDrugMargin}{\code{signature(x = "pvInd")}: returns the drug margin counts. This is equivalent to \code{object$drugMargin}}
+#'  \item{getAeMargin}{\code{signature(x = "pvInd")}: returns the adverse event margin counts. This is equivalent to \code{object$aeMargin}}
+#'  \item{getCov}{\code{signature(x = "pvInd")}: returns the covariate data.frame. This is equivalent to \code{object$cov}}
 #'  \item{naRm}{\code{signature(x = "pvInd")}: remove spontaneous reports with NA values in the covariate slot.}
-#'  \item{\code{rbind(...)}}{Take a sequence of pvInd objects and combine by rows. Be careful as the function assumes that the covariates are the same for all pvInd objects. Also the function does not work if the ae slots or drug slots contain empty rows ; empty rows can result from the use of the \code{pvIndResize} function } 
+#'  \item{\code{rbind(...)}}{Take a sequence of pvInd objects and combine them by rows into a new pvInd object. Be careful as the function assumes that the covariates are the same for all pvInd objects. Also the function does not work if the ae slots or drug slots contain empty rows ; empty rows can result from the use of the \code{pvIndResize} function.} 
 #' }
 
 # pvInd Class definition --------------------------------------------------
@@ -112,7 +112,7 @@ setMethod(
     #cat("@drugMargin: (length=", length(object@drugMargin), ")", head(object@drugMargin), "\n" , sep="")   
     #cat("@aeMargin: (length=", length(object@aeMargin), ")", head(object@aeMargin), "\n" , sep="")          
     cat("@cov: Covariate data.frame:", nrow(object@cov), "x", ncol(object@cov), "\n" )
-    if (ncol(object@cov > 0)) cat(names(object@cov), "\n")
+    if (ncol(object@cov) != 0) cat(names(object@cov), "\n")
     #    print(head(object@cov))
   }
 )# end show method for pvInd

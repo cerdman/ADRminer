@@ -37,3 +37,6 @@ levels(allResize$cov$gndr_cod) <- c("UNK", "F", "M", "UNK", "UNK")
 resGPS <- gps(allResize, strat = c("gndr_cod", "ageFac"), )
 resPvPen <- pvPen2(object = allResize, aeId = "Death", nDrugMax = 100)
 resPvPen2 <- pvPen(object = allResize, aeId = "Death", nDrugMax = 100,covId = c("ageFac", "gndr_cod"))
+
+
+

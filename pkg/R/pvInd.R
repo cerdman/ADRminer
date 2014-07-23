@@ -1,28 +1,27 @@
-#' @title pvInd
+#' @title pvInd constructor
 #' @encoding UTF-8
 #' @name pvInd
-#' @description This function (which takes the same name that its corresponding formal class \code{\link{pvInd-class}}) should be used to convert a data.frame containing individual spontaneous reports (and optionnaly supplementary individual information) into an pvInd object.
-#' @param adr a data.frame with three columns:
+#' @description This function (which takes the same name as its corresponding formal class \code{\link{pvInd-class}}) is to be used to convert spontaneous reports data to a pvInd object.
+#' @param adr A data.frame with three columns:
 #' \itemize{
 #' \item spontaneous report identifier
 #' \item drug label
 #' \item adverse event label
 #' }
-#' @param drug data.frame or matrix with two columns
+#' @param drug A data.frame or a matrix with two columns
 #' \itemize{
 #' \item spontaneous report identifier
 #' \item drug label
 #' }
-#' @param ae data.frame or matrix with two columns
+#' @param ae A data.frame or a matrix with two columns
 #' \itemize{
 #' \item spontaneous report identifier
 #' \item adverse event label
 #' }
-#' @param cov data.frame which contains individual covariates that can be used for stratified analysis. It is assumed that the first column of the data.frame corresponds to the spontaneous report identifier.
+#' @param cov A data.frame which contains individual covariates. It is assumed that the first column of the data.frame corresponds to the spontaneous report identifier.
 #' @param ... not of any use
-#' @description \code{pvInd} is used to convert raw data  (\code{adr} and ) \code{cov}) into an pvInd object that can be used in the signal detection method functions.
 #' @author Ismaïl Ahmed
-#' @return a pvInd object
+#' @return an object of class pvInd
 #' @keywords pvInd
 #' @export
 #' @docType methods
