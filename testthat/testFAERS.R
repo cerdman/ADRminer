@@ -4,6 +4,14 @@ demoFile <- c("/Users/isma/Dropbox/Work/Calculs/Pharmaco/Data/FAERS/faers_ascii_
 
 faers12q4 <- readFAERS(drugFile, reacFile, demoFile)
 
+drugFile <- c("/Users/isma/Dropbox/Work/Calculs/Pharmaco/Data/FAERS/faers_ascii_2012q4/ascii/drug12q4.txt.zip")
+reacFile <- c("/Users/isma/Dropbox/Work/Calculs/Pharmaco/Data/FAERS/faers_ascii_2012q4/ascii/reac12q4.txt.zip")
+demoFile <- c("/Users/isma/Dropbox/Work/Calculs/Pharmaco/Data/FAERS/faers_ascii_2012q4/ascii/demo12q4.txt.zip")
+
+faers12q4 <- readFAERS(drugFile, reacFile, demoFile)
+
+fread(input = "https://www.dropbox.com/s/x04kkfh8vegrm22/drug12q4.txt")
+
 drugFile <- c("/Users/isma/Dropbox/Work/Calculs/Pharmaco/Data/FAERS/faers_ascii_2013q1/asci/DRUG13Q1.txt")
 reacFile <- c("/Users/isma/Dropbox/Work/Calculs/Pharmaco/Data/FAERS/faers_ascii_2013q1/asci/REAC13Q1.txt")
 demoFile <- c("/Users/isma/Dropbox/Work/Calculs/Pharmaco/Data/FAERS/faers_ascii_2013q1/asci/DEMO13Q1.txt")

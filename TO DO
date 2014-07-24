@@ -5,10 +5,9 @@ documenter les classes
 
 #' 
 # multiple regression.
-# biclustering
 # slot aide pvInd
 
 # fonction as.dummy for pvInd covariates
 # Remplacer le glm dans la fonction pvPen par un glmnet avec lambda=0
 
-# 
+# readFAERS regarder les valeurs prises par sex et les recoder

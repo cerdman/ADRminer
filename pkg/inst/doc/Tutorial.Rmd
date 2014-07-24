@@ -1,0 +1,115 @@
+---
+title: "A first introduction to on ADRminer"
+author: "Ismaïl Ahmed"
+date: "23 juillet 2014"
+output: pdf_document
+---
+
+```{r setup, eval=TRUE, include=F}
+require(knitr)
+opts_knit$set(root.dir="/Users/isma/Dropbox/Work/Calculs/Pharmaco/Data/FAERS")
+```
+
+This tutorial aims at illustrate the functionalities of the ADRminer package. It is based on 
+spontaneous reports from the FAERS. The data that will be used throughout the document are
+from the second and third semester of 2013 and can be downloaded [here][id] (the ASCII version). 
+We assume that the data are uncompressed and gathered in a common directory
+```{r checkDir, eval=TRUE}
+list.files()
+```
+
+# Data import
+
+The first step is to import the data and to convert them into objects that can be handled by 
+the ADRminer package. ADRminer provides with a function which facilitate the importation of the data from the AERS
+This function requires at least three arguments :
+
+1. a path to the drug file
+2. a path to the adverse reaction file
+3. a path to the demo file, the latter being used to collect individuals characteristics such as the age and gender of the patients
+
+```{r readFAERS}
+drugFile <- c("./faers_ascii_2013q2/asii/DRUG13Q2.txt")
+reacFile <- c("./faers_ascii_2013q2/asii/REAC13Q2.txt")
+demoFile <- c("./faers_ascii_2013q2/asii/DEMO13Q2.txt")
+
+library(ADRminer)
+faers13q2 <- readFAERS(drugFile, reacFile, demoFile)
+faers13q2
+```
+Using the default value of readFAERS, we see that the `faers13q2` is an object of class S4 `pvInd` , which is made of 
+
+1. a `sparse matrix` containing `r nrow(faers13q2$drug)` spontaneous reports and involvinv x `r ncol(faers13q2$drug)` different drugs
+2. a `sparse matrix` containing `r nrow(faers13q2$ae)` spontaneous reports and involving x `r ncol(faers13q2$drug)` different adverse events
+3. a `data.frame` containing indivdual covariates extracted from the DEMO**.txt file
+
+it is really unlikely that a signal generation procedure will be restricted on one semester. Accordingly we extended the `rbind` function to the class pvInd in order to merge several pvInd object
+
+```{r rbind}
+## data import from the third semester 2013
+drugFile <- c("./AERS_ASCII_2013q3/ASCII/DRUG13Q3.txt")
+reacFile <- c("./AERS_ASCII_2013q3/ASCII/REAC13Q3.txt")
+demoFile <- c("./AERS_ASCII_2013q3/ASCII/DEMO13Q3.txt")
+faers13q3 <- readFAERS(drugFile, reacFile, demoFile)
+faers13q3
+faers13q23 <- rbind(faers13q2, faers13q3)
+faers13q23
+```
+
+We see that spontaneous reports are concatenated. Note that the number of drugs and adverse events increase as both file do not involve the same drugs and adverse events.
+
+Some basic functions have been developed to access and manipulate the object `faers13q23`.
+In particular, we can use the `pvIndResize` function to eliminate drugs and adverse events associated with a too small (say less than 50) number of spontaneous reports which will drastically decrease the number of drugs and adverse events.
+```{r pvIndResize}
+faers13q23resize <- pvIndResize(faers13q23, aeMarginMin = 50, drugMarginMin = 50)
+faers13q23resize
+```
+
+# Signal detection analysis
+## Gamma Poisson Shrinker
+The first method illustrated in this tutorial is the Gamma Poisson Shrinker (GPS) initially proposed by DuMouchel (American Statistician 1999) as well as its extension to the multiple comparison framework (Ahmed et al. Stat Med 2009). The corresponding function is `gps` which can take a number of arguments. The default parametrisation corresponds to the extension proposed in Ahmed et al. (2009): the drug adverse event pairs are ranked according to the posterior probability of a null hypothesis (H0: the relatvie risk `rr0 <= 1` and a signal is generated based on an estimated False Discovery Rate (FDR, Benjamini an Hochberg JRSSB 1995) less than 0.05. Alternatively, it is also possible to use the detection strategy proposed in Szarfman et al. (Drug Safety 2002) which consists in highlighting drug-ae pairs associated with EB05 > 2. 
+```{r gps}
+resGPSpH0 <- gps(faers13q23resize)
+## equivalent to resGPSpH0 <- gps(faers13q23resize, assocMeasure = "posH0", 
+## detectCriter = "FDR", criterThres = 0.05))
+```
+
+The number of generated signals is:
+```{r}
+resGPSpH0$nSig 
+```
+A summary of the characteristics of the generated signals is stored in `$sig`
+```{r}
+head(resGPSpH0$sig)
+```
+
+Here are the results obtained with the detection strategy proposed by Szarfman et al.
+```{r, eval=FALSE}
+resGPSsz <- gps(faers13q23resize, assocMeasure = "lb05", 
+                detectCriter = "assocMeasure", criterThres = 2)
+resGPSsz$nSig
+head(resGPSsz$sig) 
+```
+
+It is also possible ta perform stratified GPS analysis according to covariates stored in the pvInd object "faers13q23resize$cov". However, this may require to recode some covariates into `factors` with a reasonable number of categories especially if one is willing to stratify according to several covariates such as age and gender.
+
+Here we illustrate how to recode the age covariate into a new factor variable
+```{r}
+hist(faers13q23resize$cov$age, breaks = 100)
+ageFac <- cut(faers13q23resize$cov$age, c(0,1,10,25,50, 120), include.lowest = T)
+table(ageFac)
+ageFac <- addNA(ageFac) ## this is to consider NA values as a category
+table(ageFac)
+faers13q23resize$cov$ageFac <- ageFac
+```
+
+The syntax to run stratified GPS according to ageFac is then
+```{r}
+resGPSstrat <- gps(faers13q23resize, strat="ageFac")
+resGPSstrat$nSig
+head(resGPSstrat$sig) 
+```
+
+
+
+[idFAERS]: http://www.fda.gov/Drugs/GuidanceComplianceRegulatoryInformation/Surveillance/AdverseDrugEffects/ucm082193.htm

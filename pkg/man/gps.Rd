@@ -20,8 +20,6 @@ hyperparam = NULL, allRes=F, \dots)
 \arguments{
 \item{object}{An object of class pvInd or pvCont}
 
-\item{rr0}{The tested risk. By default, rr0=1.}
-
 \item{assocMeasure}{Statistic used to order the drug-events pairs:
 \itemize{
 \item postH0: Posterior probability of the null hypothesis
@@ -39,6 +37,8 @@ hyperparam = NULL, allRes=F, \dots)
 \item{criterThres}{Threshold used for \code{detectCriter}. Ex 0.05 for FDR.}
 
 \item{nMin}{Minimum number of spontaneous reports for a drug-event pair to be potentially considered as a signal. By default, \code{nMin=1}.}
+
+\item{rr0}{The tested risk. By default, rr0=1.}
 
 \item{truncThres}{Used for the hyper parameter calculation. The marginal likelihood involves mixtures of two (possibly truncated) negative binomial. Using a value of t for this parameter means that only spontaneous reports associated with strictly more than t (>t) reports will be used and that the likelihood is a mixture of truncated negative binomial. Default value is set to 0 as the information regarding drug-event pairs not associated with any adr is not used. By setting \code{truncThres} to NULL, the whole contingency table is rebuild and all data (thus including the 0s) are used to estimate the hyperparameters.}
 

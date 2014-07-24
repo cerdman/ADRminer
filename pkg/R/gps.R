@@ -1,7 +1,6 @@
 #' @encoding UTF-8
 #' @title Gamma Poisson Shrinkage
 #' @param object An object of class pvInd or pvCont
-#' @param rr0 The tested risk. By default, rr0=1.
 #' @param assocMeasure Statistic used to order the drug-events pairs: 
 #' \itemize{
 #' \item postH0: Posterior probability of the null hypothesis
@@ -16,6 +15,7 @@
 #' }
 #' @param criterThres Threshold used for \code{detectCriter}. Ex 0.05 for FDR.
 #' @param nMin Minimum number of spontaneous reports for a drug-event pair to be potentially considered as a signal. By default, \code{nMin=1}.
+#' @param rr0 The tested risk. By default, rr0=1.
 #' @param truncThres Used for the hyper parameter calculation. The marginal likelihood involves mixtures of two (possibly truncated) negative binomial. Using a value of t for this parameter means that only spontaneous reports associated with strictly more than t (>t) reports will be used and that the likelihood is a mixture of truncated negative binomial. Default value is set to 0 as the information regarding drug-event pairs not associated with any adr is not used. By setting \code{truncThres} to NULL, the whole contingency table is rebuild and all data (thus including the 0s) are used to estimate the hyperparameters. 
 #' @param hyperparamInit Initialization vector for the prior mixture parameters (alpha1, beta1, alpha2, beta2, w). By default, hyperparamInit = c(alpha1 = 0.2, beta1 = 0.06, alpha2 = 1.4, beta2 = 1.8, w = 0.1), i.e. the prior parameters provided in DuMouchel (1999).
 #' @param hyperparam Hyper parameter values for the 2 gamma mixture model. By default, hyperparam = NULL which means that the hyperparameters are calculated by maximizing the marginal likelihood. This parameter is meant to avoid this maximization step
@@ -54,7 +54,7 @@ gps <- function (object, ...) UseMethod("gps")
 
 # gps pvCont --------------------------------------------------------------
 #' @export 
-gps.pvCont <- function(object, rr0 = 1, assocMeasure = c("postH0","lb05","postE"), detectCriter = c("FDR","nSig","assocMeasure"), criterThres = 0.05, nMin=1, truncThres = 0, hyperparamInit = c(alpha1 = 0.2, beta1 = 0.06, alpha2 = 1.4, beta2 = 1.8, w = 0.1), hyperparam = NULL, allRes = F, ...){
+gps.pvCont <- function(object, assocMeasure = c("postH0","lb05","postE"), detectCriter = c("FDR","nSig","assocMeasure"), criterThres = 0.05, nMin=1, rr0 = 1, truncThres = 0, hyperparamInit = c(alpha1 = 0.2, beta1 = 0.06, alpha2 = 1.4, beta2 = 1.8, w = 0.1), hyperparam = NULL, allRes = F, ...){
   
   if(!inherits(object, "pvCont")) stop("x must be a pvCont object.")
   assocMeasure <- match.arg(assocMeasure) # keep only the first argument

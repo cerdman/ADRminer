@@ -84,6 +84,7 @@ readFAERS <-function(drugFile, reacFile, demoFile, ROLE_COD=c("PS", "SS"),
   demo$age[demo$age_cod == "HR"] <- demo$age[demo$age_cod == "HR"] / (365 *24)
   demo$age[demo$age_cod == "MON"] <- demo$age[demo$age_cod == "MON"] / 12
   demo$age[demo$age_cod == "WK"] <- demo$age[demo$age_cod == "WK"] / 52
+  demo$age[demo$age > 120] <- NA
   demo <- demo[, -3] ## remove age_cod
   
   res <- pvInd(drug = drug, ae = reac, cov = demo)
