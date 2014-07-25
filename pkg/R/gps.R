@@ -38,14 +38,14 @@
 #' @aliases gps.pvInd gps.pvCont
 #' @rdname gps
 ##' @usage
-##' \method{gps}{pvCont}(object, rr0=1, assocMeasure=c("postH0","lb05","postE"), 
-##' detectCriter=c("FDR","nSig","assocMeasure"), criterThres = 0.05, nMin=1, truncThres = 0, 
+##' \method{gps}{pvCont}(object, assocMeasure=c("postH0","lb05","postE"), 
+##' detectCriter=c("FDR","nSig","assocMeasure"), criterThres = 0.05, nMin=1, rr0=1, truncThres = 0, 
 ##' hyperparamInit = c(alpha1= 0.2, beta1= 0.06, alpha2=1.4, beta2=1.8, w=0.1), 
 ##' hyperparam = NULL, allRes=F, \dots)
 ##' 
-##' \method{gps}{pvInd}(object, rr0=1, assocMeasure=c("postH0","lb05","postE"), 
+##' \method{gps}{pvInd}(object, assocMeasure=c("postH0","lb05","postE"), 
 ##' detectCriter=c("FDR","nSig","assocMeasure"), criterThres = 0.05, strat=NULL, 
-##' nMin=1, truncThres = 0, hyperparamInit = c(alpha1= 0.2, beta1= 0.06, alpha2=1.4, beta2=1.8, w=0.1), 
+##' nMin=1, rr0=1, truncThres = 0, hyperparamInit = c(alpha1= 0.2, beta1= 0.06, alpha2=1.4, beta2=1.8, w=0.1), 
 ##' hyperparam = NULL, allRes=F, \dots)
 
 # gps definition ----------------------------------------------------------
@@ -54,7 +54,11 @@ gps <- function (object, ...) UseMethod("gps")
 
 # gps pvCont --------------------------------------------------------------
 #' @export 
-gps.pvCont <- function(object, assocMeasure = c("postH0","lb05","postE"), detectCriter = c("FDR","nSig","assocMeasure"), criterThres = 0.05, nMin=1, rr0 = 1, truncThres = 0, hyperparamInit = c(alpha1 = 0.2, beta1 = 0.06, alpha2 = 1.4, beta2 = 1.8, w = 0.1), hyperparam = NULL, allRes = F, ...){
+gps.pvCont <- 
+  function(object, assocMeasure = c("postH0","lb05","postE"), detectCriter = c("FDR","nSig","assocMeasure"), 
+           criterThres = 0.05, nMin=1, rr0 = 1, truncThres = 0, 
+           hyperparamInit = c(alpha1 = 0.2, beta1 = 0.06, alpha2 = 1.4, beta2 = 1.8, w = 0.1), 
+           hyperparam = NULL, allRes = F, ...){
   
   if(!inherits(object, "pvCont")) stop("x must be a pvCont object.")
   assocMeasure <- match.arg(assocMeasure) # keep only the first argument
@@ -180,21 +184,25 @@ gps.pvCont <- function(object, assocMeasure = c("postH0","lb05","postE"), detect
 
 # gps pvInd ---------------------------------------------------------------
 #' @export
-gps.pvInd <- function(object, rr0=1, assocMeasure=c("postH0","lb05","postE"), detectCriter=c("FDR","nSig","assocMeasure"), criterThres = 0.05, strat=NULL, nMin=1, truncThres = 0, hyperparamInit = c(alpha1= 0.2, beta1= 0.06, alpha2=1.4, beta2=1.8, w=0.1), hyperparam = NULL, allRes=F, ...){
-  if(!inherits(object, "pvInd")) stop("x must be a pvInd object.")
-  assocMeasure <- match.arg(assocMeasure) #keep only the first argument
-  detectCriter <- match.arg(detectCriter)
-  objectPvCont <- pvCont(object)
-  if (!is.null(strat)) {
-    temp <- pvCont(object, strat)
-    #print(head(temp@expN))
-    expN <-apply(temp@expN, 1, sum)
-    objectPvCont@expN <- matrix(expN, ncol=1)
-  }  
-  return(gps(objectPvCont, rr0=rr0, assocMeasure=assocMeasure, detectCriter=detectCriter, criterThres=criterThres, nMin=nMin, truncThres=truncThres, hyperparamInit=hyperparamInit, hyperparam=hyperparam, allRes=allRes))
-  #NextMethod(generic="gps", object=objectPvCont, rr0=rr0, assocMeasure=assocMeasure, detectCriter=detectCriter, criterThres=criterThres, nMin=nMin, truncThres=truncThres, hyperparamInit=hyperparamInit, hyperparam=hyperparam, allRes=allRes)
-  
-}
+gps.pvInd <- 
+  function(object, assocMeasure=c("postH0","lb05","postE"), 
+           detectCriter=c("FDR","nSig","assocMeasure"), criterThres = 0.05, strat=NULL, 
+           nMin=1, rr0=1,  truncThres = 0, hyperparamInit = c(alpha1= 0.2, beta1= 0.06, alpha2=1.4, beta2=1.8, w=0.1), 
+           hyperparam = NULL, allRes=F, ...){
+    if(!inherits(object, "pvInd")) stop("x must be a pvInd object.")
+    assocMeasure <- match.arg(assocMeasure) #keep only the first argument
+    detectCriter <- match.arg(detectCriter)
+    objectPvCont <- pvCont(object)
+    if (!is.null(strat)) {
+      temp <- pvCont(object, strat)
+      #print(head(temp@expN))
+      expN <-apply(temp@expN, 1, sum)
+      objectPvCont@expN <- matrix(expN, ncol=1)
+    }  
+    return(gps(objectPvCont, rr0=rr0, assocMeasure=assocMeasure, detectCriter=detectCriter, criterThres=criterThres, nMin=nMin, truncThres=truncThres, hyperparamInit=hyperparamInit, hyperparam=hyperparam, allRes=allRes))
+    #NextMethod(generic="gps", object=objectPvCont, rr0=rr0, assocMeasure=assocMeasure, detectCriter=detectCriter, criterThres=criterThres, nMin=nMin, truncThres=truncThres, hyperparamInit=hyperparamInit, hyperparam=hyperparam, allRes=allRes)
+    
+  }
 
 .quantGps <- function(Seuil, Q, a1, b1, a2, b2) {
   m <- rep(-100000,length(Q))

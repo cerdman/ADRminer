@@ -7,14 +7,14 @@
 \alias{gps.pvInd}
 \title{Gamma Poisson Shrinkage}
 \usage{
-\method{gps}{pvCont}(object, rr0=1, assocMeasure=c("postH0","lb05","postE"),
-detectCriter=c("FDR","nSig","assocMeasure"), criterThres = 0.05, nMin=1, truncThres = 0,
+\method{gps}{pvCont}(object, assocMeasure=c("postH0","lb05","postE"),
+detectCriter=c("FDR","nSig","assocMeasure"), criterThres = 0.05, nMin=1, rr0=1, truncThres = 0,
 hyperparamInit = c(alpha1= 0.2, beta1= 0.06, alpha2=1.4, beta2=1.8, w=0.1),
 hyperparam = NULL, allRes=F, \dots)
 
-\method{gps}{pvInd}(object, rr0=1, assocMeasure=c("postH0","lb05","postE"),
+\method{gps}{pvInd}(object, assocMeasure=c("postH0","lb05","postE"),
 detectCriter=c("FDR","nSig","assocMeasure"), criterThres = 0.05, strat=NULL,
-nMin=1, truncThres = 0, hyperparamInit = c(alpha1= 0.2, beta1= 0.06, alpha2=1.4, beta2=1.8, w=0.1),
+nMin=1, rr0=1, truncThres = 0, hyperparamInit = c(alpha1= 0.2, beta1= 0.06, alpha2=1.4, beta2=1.8, w=0.1),
 hyperparam = NULL, allRes=F, \dots)
 }
 \arguments{
