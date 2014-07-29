@@ -15,7 +15,8 @@ Depends:
     glmnet,
     data.table
 Suggests:
-    parallel
+    parallel,
+    R.rsp
 Collate:
     'ADRminer.R'
     'gps.R'
@@ -29,3 +30,4 @@ Collate:
     'pvPen2.R'
     'readFAERS.R'
     'zzz.R'
+VignetteBuilder: R.rsp
