@@ -11,3 +11,10 @@ documenter les classes
 # Remplacer le glm dans la fonction pvPen par un glmnet avec lambda=0
 
 # readFAERS regarder les valeurs prises par sex et les recoder
+
+# pour la fonction pvPen: on peut faire une sortie un peu plus homogène avec gps. pvPenRes$sig qui contiendrait la concaténation de tous les résulttats par événement indésirables. Il y aurait une colonne ei une médi et une beta de régression. Reste à savoir si on utilise les pvalues pour ordonner.
+# il faudrait aussi créer une option pour ne pas générer une trop grosse sortie un peu comme pour GPS genre allRes= F
+# Un autre truc serait de formater la sortie de gps$sig et de pvPen$sig comme un tableau dPlyr afin de pouvoir faire des tris facilement et de faire des jolis graphes avec ggvis.
+# regarder à quoi pourrait servir tidyr et réfléchir à quels graphiques on pourrait faire en regardand un peu les solutions commerciales ?
+# Faire une fonction ROR-RFET
+# changer le fichier de covariables en un fichier dplyr ?
